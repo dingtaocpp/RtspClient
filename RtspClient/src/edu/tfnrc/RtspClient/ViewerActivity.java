@@ -21,7 +21,7 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
 
     private RtspControl controlTest;
 
-    private String uri = "rtsp://192.168.2.1:6880/";
+    private String uri = "rtsp://192.168.2.1:6880";
 
     private String resource = "test.264";
 
@@ -59,8 +59,7 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                controlTest = new RtspControl(uri, resource);
-                controlTest.getClient().setHandler(handler);
+                controlTest = new RtspControl(uri, resource, handler);
             }
         }).start();
 

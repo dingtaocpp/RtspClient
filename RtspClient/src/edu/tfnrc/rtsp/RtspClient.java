@@ -207,7 +207,6 @@ public class RtspClient implements TransportListener {
             RtspRequest message = (RtspRequest)messageFactory.outgoingRequest(uri.toString(), Request.Method.TEARDOWN, nextCSeq(), session, new RtspHeader("Connection", "close"));
             send(message);
 
-            Log.i(TAG, message.toString());
         }catch (Exception e){
 
             Log.e(TAG, "teardown error");

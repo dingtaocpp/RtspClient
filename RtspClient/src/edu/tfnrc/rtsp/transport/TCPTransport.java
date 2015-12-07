@@ -77,12 +77,10 @@ public class TCPTransport implements Transport{
 
         int port = to.getPort();
 
-        Log.d(TAG, "uri=" + to.getHost() +" connect port= " + port);
 
         if(port == -1) port = 6880;
 
         socket = new Socket(to.getHost(), port);
-        Log.d(TAG, "new socket");
         setConnected(true);
         thread = new TCPTransportThread(this, transportListener);
         thread.start();

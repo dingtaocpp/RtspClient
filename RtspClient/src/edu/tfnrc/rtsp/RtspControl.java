@@ -1,5 +1,6 @@
 package edu.tfnrc.rtsp;
 
+import android.os.Handler;
 import android.util.Log;
 import edu.tfnrc.rtsp.api.EntityMessage;
 import edu.tfnrc.rtsp.api.Request;
@@ -63,17 +64,19 @@ public class RtspControl implements RequestListener{
         }
     }
 
-    public RtspControl(String uri, String resource){
+    public RtspControl(String uri, String resource, Handler handler){
 
         try{
             this.uri = new URI(uri);
             this.resource = resource;
 
-            Log.d(TAG, "new RtspClient");
+            Log.d(TAG, "new RtspControl");
 
             this.client = new RtspClient();
             this.client.setTransport(new TCPTransport());
             this.client.setRequestListener(this);
+
+            this.client.setHandler(handler);
 
             this.state = RtspConstants.UNDEFINED;
 

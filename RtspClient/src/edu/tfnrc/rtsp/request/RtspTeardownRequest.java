@@ -14,9 +14,6 @@ public class RtspTeardownRequest extends RtspRequest {
 
     public RtspTeardownRequest() {
         super();
-
-        Log.d("RtspClient", "Teardown Constuct");
-
     }
 
     public RtspTeardownRequest(String messageLine) throws URISyntaxException {
