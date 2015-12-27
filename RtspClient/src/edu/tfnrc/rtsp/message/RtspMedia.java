@@ -24,6 +24,7 @@ public class RtspMedia {
     private static String SDP_LENGTH    = "a=length:";
     private static String SDP_RTPMAP    = "a=rtpmap:";     //TODO:原名:SDP_RTMAP
     private static String SDP_FRAMERATE = "a=framerate:";
+//    private static String SDP_RECVONLY  = "a=recvonly";
 
     public RtspMedia(String line){      //注意line格式，顺序
         String[] tokens = line.substring(2).split(" ");
@@ -58,6 +59,9 @@ public class RtspMedia {
     //根据line信息设置媒体各属性
     public void setAttribute(String line) throws Exception {
 
+        /*if(line.startsWith(SDP_RECVONLY)){
+            return;
+        }else*/
         if(line.startsWith(SDP_CONTROL)){
                 return;
         }else if(line.startsWith(SDP_RANGE)){
@@ -80,6 +84,7 @@ public class RtspMedia {
             }else {
                 encoding = tokens[1];
             }
+            //TODO: 处理"a=fmtp"
         }else   /*不正确的SDP描述*/
             throw new Exception("Uncorrect SDP Description");
     }

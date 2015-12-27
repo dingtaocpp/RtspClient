@@ -102,4 +102,30 @@ public class RtpInputStream implements ProcessorInputStream {
         inputFormat = null;
         return buffer;
     }
+
+    /**
+     * Read from the input stream without blocking
+     * put data into the parameter buffer
+     *
+     * @param buffer
+     * @throws Exception
+     */
+    public void read(Buffer buffer) throws Exception{
+        RtpPacket rtpPacket = rtpReceiver.readRtpPacket();
+        if(rtpPacket == null){
+            return;
+        }
+
+        //Create a buffer
+        buffer.setData(rtpPacket.data);
+        buffer.setLength(rtpPacket.payloadLength);
+        buffer.setOffset(0);
+        buffer.setFormat(inputFormat);
+        buffer.setSequenceNumber(rtpPacket.seqnum);
+        buffer.setFlags(Buffer.FLAG_RTP_MARKER | Buffer.FLAG_RTP_TIME);
+        buffer.setRTPMarker(rtpPacket.marker != 0);
+        buffer.setTimeStamp(rtpPacket.timestamp);
+
+        inputFormat = null;
+    }
 }

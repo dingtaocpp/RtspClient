@@ -1,12 +1,17 @@
 package edu.tfnrc.RtspClient;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+import edu.tfnrc.rtp.RtpVideoRenderer;
 import edu.tfnrc.rtsp.RtspControl;
 import edu.tfnrc.rtsp.RtspControlTest;
 
@@ -14,14 +19,16 @@ import java.lang.ref.WeakReference;
 
 public class ViewerActivity extends Activity implements View.OnClickListener {
 
-    private Button buttonSetup, buttonOptions, buttonDescribe,
-            buttonPlay, buttonPause, buttonStop;
+    //debug
+    private static final String TAG = "ViewerActivity";
+
+    private Button buttonStart, buttonStop;
 
     public TextView requestView, responseView;
 
-    private RtspControl controlTest;
+    private RtpVideoRenderer incomingRenderer = null;
 
-    private String uri = "rtsp://192.168.2.1:6880";
+    private String uri = "rtsp://192.168.2.1:6880/";
 
     private String resource = "test.264";
 
@@ -40,29 +47,32 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
 //        controlTest = new RtspControl(uri, resource);
 //        controlTest.getClient().setHandler(handler);
 
-        buttonDescribe  = (Button)findViewById(R.id.buttonDescribe);
-        buttonOptions   = (Button)findViewById(R.id.buttonOptions);
-        buttonSetup     = (Button)findViewById(R.id.buttonSetup);
-        buttonPlay      = (Button)findViewById(R.id.buttonPlay);
-        buttonPause     = (Button)findViewById(R.id.buttonPause);
-        buttonStop      = (Button)findViewById(R.id.buttonStop);
+        buttonStart  = (Button)findViewById(R.id.buttonStart);
+        buttonStop   = (Button)findViewById(R.id.buttonStop);
 
-        buttonDescribe.setOnClickListener(this);
-        buttonOptions.setOnClickListener(this);
-        buttonSetup.setOnClickListener(this);
-        buttonPlay.setOnClickListener(this);
-        buttonPause.setOnClickListener(this);
         buttonStop.setOnClickListener(this);
+        buttonStart.setOnClickListener(this);
 
-        Log.d("Button", "Button find");
+        Log.d(TAG, "on Create");
+        //有木有wifi
+        if(((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE))
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() != NetworkInfo.State.CONNECTED) {
+            Toast.makeText(this, "请连接WIFI", Toast.LENGTH_LONG).show();
+        }
+        else {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        incomingRenderer = new RtpVideoRenderer(uri, handler);
+                        Log.d(TAG, "new Renderer");
+                    } catch (Exception e) {
+                        Log.e(TAG, "fail to new Renderer", e);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                controlTest = new RtspControl(uri, resource, handler);
-            }
-        }).start();
-
+                    }
+                }
+            }.start();
+        }
     }
 
     Handler handler = new Handler(){
@@ -77,43 +87,56 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Log.d("Button", "Button clicked");
-        new Thread(new ControlTest(v.getId())).start();
+        switch (v.getId()){
+            case R.id.buttonStart:
+                incomingRenderer.open();
+                incomingRenderer.start();
+                break;
+            case R.id.buttonStop:
+                incomingRenderer.stop();
+                incomingRenderer.close();
+                break;
+
+            default:
+                Log.e("Button", "Error Button");
+        }
     }
 
-    class ControlTest implements Runnable{
+//    class ClientTest implements Runnable{
+//
+//        private int viewId;
+//        public ClientTest(int id){
+//            viewId = id;
+//        }
+//
+//        public void run(){
+//            switch(viewId){
+//
+//                case R.id.buttonStart:
+//                    incomingRenderer.open();
+//                    incomingRenderer.start();
+//                    break;
+//                case R.id.buttonStop:
+//                    incomingRenderer.stop();
+//                    incomingRenderer.close();
+//                    break;
+//                default:
+//                    Log.e("Button", "Error Button");
+//
+//            }
+//        }
+//    }
 
-        private int viewId;
-        public ControlTest(int id){
-            viewId = id;
-        }
 
-        public void run(){
-            switch(viewId){
-                case R.id.buttonDescribe:
-                    controlTest.describe();
-                    Log.d("Button", "describe button");
-                    break;
-                case R.id.buttonOptions:
-                    controlTest.options();
-                    Log.d("Button", "options button");
-                    break;
-                case R.id.buttonSetup:
-                    controlTest.setup();
-                    Log.d("Button", "setup button");
-                    break;
-                case R.id.buttonPlay:
-                    controlTest.play();
-                    break;
-                case R.id.buttonPause:
-                    controlTest.pause();
-                    break;
-                case R.id.buttonStop:
-                    controlTest.stop();
-                    break;
-                default:
-                    Log.e("Button", "Error Button");
+    @Override
+    public void onDestroy() {
+        Log.i(TAG, "onDestroy");
 
-            }
+        super.onDestroy();
+
+        if(incomingRenderer != null) {
+            incomingRenderer.stop();
+            incomingRenderer.close();
         }
     }
 }

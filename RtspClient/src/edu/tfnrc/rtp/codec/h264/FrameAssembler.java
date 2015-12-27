@@ -1,8 +1,12 @@
 package edu.tfnrc.rtp.codec.h264;
 
+import android.util.Log;
 import edu.tfnrc.rtp.codec.Codec;
 import edu.tfnrc.rtp.media.format.Format;
+import edu.tfnrc.rtp.stream.OutputToFile;
 import edu.tfnrc.rtp.util.Buffer;
+
+import java.io.IOException;
 
 /**
  * Assemble buffer to frames
@@ -23,7 +27,7 @@ public class FrameAssembler extends Codec{
     /**
      * Max frame size to give for next module, as some decoder have frame size limits
      */
-    private static int MAX_H264P_FRAME_SIZE = 8192;//TODO: to be tested
+    private static int MAX_H264P_FRAME_SIZE = 20480;//TODO: to be tested
 
 
 
@@ -44,6 +48,7 @@ public class FrameAssembler extends Codec{
 
             if(frameCollection.getLastActiveFrame().isCompleted()){
                 frameCollection.getLastActiveFrame().copyToBuffer(output);
+
                 output.setDiscard(false);
                 frameCollection.removeOlderThan(input.getTimeStamp());
                 return BUFFER_PROCESSED_OK;
@@ -62,11 +67,17 @@ public class FrameAssembler extends Codec{
 
         private static final int DEAFAULT_CAPACITY = 8;
 
+        //output to file for debug
+        private static OutputToFile output = new OutputToFile("frameOutput");
+
         //a buffer array
         private Buffer[] buffers = null;
 
         //numbers of available elements in array
-        private volatile int size = 0;
+        private int size = 0;
+
+        //save least seqnumber
+        private int minSeqnum = Integer.MAX_VALUE;
 
         //capacity to contain the Buffers,which can expand by twice
         private int capacity = DEAFAULT_CAPACITY;
@@ -75,7 +86,7 @@ public class FrameAssembler extends Codec{
         private int endPos = Integer.MAX_VALUE - 2;
 
         //Frame data saved from input buffer with same timestamp
-        private byte[] data = null;
+//        private byte[] data = null;
 
         //Sum of buffers' data length, for output data
         int dataLength = 0;
@@ -84,6 +95,7 @@ public class FrameAssembler extends Codec{
 
         private Format format = null;
 
+
         public Frame(){
             buffers = new Buffer[DEAFAULT_CAPACITY];
         }
@@ -91,16 +103,23 @@ public class FrameAssembler extends Codec{
         public Frame(long timeStamp){
             this.timeStamp = timeStamp;
             buffers = new Buffer[DEAFAULT_CAPACITY];
+            try{
+                output.open();
+            }catch (Exception e){
+                Log.e(TAG, "output open fail", e);
+            }
         }
 
         /**
          * Add the buffer (which contains a fragment) to the array and sort by sequence number.
          */
-        public void put(Buffer buffer){
+        public synchronized void put(Buffer buffer){
             if(buffer == null) return;
 
-            int index =(int) buffer.getSequenceNumber();
-            if(index > endPos) return;
+
+            int seqnum = (int) buffer.getSequenceNumber();
+            if(seqnum > endPos) return;
+            if(isCompleted()) return;
 
             //The first buffer is put in,init the timeStamp and format
             if(size == 0) {
@@ -108,72 +127,104 @@ public class FrameAssembler extends Codec{
                 format = buffer.getFormat();
             }
 
+            minSeqnum = Math.min(minSeqnum, seqnum);
+
             //judge if the array is expanded
             boolean expanded = false;
-            while(index >= capacity){
+            while(seqnum - minSeqnum >= capacity){
                 capacity <<= 1;
                 expanded = true;
             }
             if(expanded){
-                Buffer[] bftemp = this.buffers;
+                Buffer[] tempbfs = this.buffers;
                 this.buffers = new Buffer[capacity];
-                System.arraycopy(bftemp, 0, this.buffers, 0, bftemp.length);
+                System.arraycopy(tempbfs, 0, this.buffers, 0, tempbfs.length);
             }
 
-            //put buffer into array and update
-            if(buffers[index] == null) {
-                buffers[index] = buffer;
-                size++;
-                dataLength += buffer.getLength();
 
-                if(buffer.isRTPMarkerSet()){
-                    //TODO: if there are several true marker(mostly impossible)
-                    endPos = index;
+                //put buffer into array and update
+                if (buffers[size] == null) {
+                    buffers[size] = buffer;
+                    size++;
+                    dataLength += buffer.getLength();
+
+                    //output to file for debug
+//                try {
+//                    output.write(buffer);
+//                } catch (Exception e){
+//                    Log.e(TAG, "failed to output", e);
+//                }
+
+                    Log.i(TAG, "TimeStamp: " + timeStamp + "\tsize: " + size
+                            + "\tSeqnum: " + seqnum);
+//                    for(int i = 0; i < size; ++i)
+//                        Log.i(TAG, "buffers[" + i + "].seqnum: " + buffers[i].getSequenceNumber());
+
+                    if (buffer.isRTPMarkerSet()) {
+                        //TODO: if there are several true marker(almost impossible)
+                        endPos = seqnum;
+//                        Log.d(TAG, "endPos: " + endPos);
+                    }
                 }
-            }
-            assembleBytes();
+
+//            assembleBytes();
         }
 
         public boolean isCompleted(){
 
-            return size == endPos + 1;
+            return size == endPos - minSeqnum + 1;
         }
 
         //assemble the buffer array to the data
-        private void assembleBytes(){
+        private byte[] assembleBytes(){
 
-            if(isCompleted() && data == null) {
-                data = new byte[dataLength];
+                Log.d(TAG, "start assembling");
+
+                sortBuffers();
+                byte[] data = new byte[dataLength];
                 for (int i = 0, offset = 0; i < size; ++i) {
+                    Log.i(TAG, "seqnum: " + buffers[i].getSequenceNumber());
                     System.arraycopy((byte[]) buffers[i].getData(), buffers[i].getOffset(), data, offset, buffers[i].getLength());
                     offset += buffers[i].getLength();
                 }
-            }
+            return data;
         }
+
+        //sort the buffers as the seqnumber, assuming the buffers are completed
+        private void sortBuffers(){
+            Buffer[] temp = new Buffer[size];
+            int pos = 0;
+            System.arraycopy(buffers, 0, temp, 0, size);
+            for(int i = 0; i < this.size; ++i){
+                pos = (int) (buffers[i].getSequenceNumber() - minSeqnum);
+                buffers[pos] = temp[i];
+                }
+        }
+
 
         //copy the assembled frame to output buffer
         public void copyToBuffer(Buffer output){
             if(!isCompleted())
                 throw new IllegalStateException();
 
+            byte[] data = assembleBytes();
             if(data.length <= 0)
                 throw new IllegalStateException();
 
             if(data.length <= MAX_H264P_FRAME_SIZE){
+
+
                 output.setData(data);
                 output.setLength(data.length);
                 output.setOffset(0);
                 output.setTimeStamp(timeStamp);
+                output.setSequenceNumber(0L);
                 output.setFormat(format);
                 output.setFlags(Buffer.FLAG_RTP_MARKER | Buffer.FLAG_RTP_TIME);
             }
-            //set data to null
-            data = null;
         }
 
-        public byte[] getData(){
-            return data;
-        }
+
 
         public long getTimeStamp() {
             return timeStamp;
@@ -183,6 +234,8 @@ public class FrameAssembler extends Codec{
     static class FrameCollection{
         final static int NUMBER_OF_FRAMES = 8;
 
+
+
         private Frame[] frames = new Frame[NUMBER_OF_FRAMES];
         private int activeFrame = 0;
         private int numberOfFrames = 0;
@@ -191,6 +244,7 @@ public class FrameAssembler extends Codec{
         * Add the buffer to the correct frame
         * */
         public void put(Buffer buffer){
+
             activeFrame = getFrame(buffer.getTimeStamp());
             if(activeFrame == -1) return;
             frames[activeFrame].put(buffer);

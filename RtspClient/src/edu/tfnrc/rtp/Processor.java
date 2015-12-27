@@ -88,8 +88,9 @@ public class Processor extends Thread {
             //read packets and deal with them
             while(!interrupted){
                 //read data from the input stream
-                Buffer inBuffer = inputStream.read();
-                if(inBuffer == null){
+                Buffer inBuffer = new Buffer();
+                inputStream.read(inBuffer);
+                if(inBuffer.getData() == null){
                     interrupted = true;
                     Log.d(TAG, "Processing terminated: null data received");
                     break;
@@ -102,6 +103,7 @@ public class Processor extends Thread {
                 if(result == Codec.BUFFER_PROCESSED_OK){
 
                     //output buffer written to the surface view
+
                     outputStream.write(outputBuffer);
                 }else if(result == Codec.OUTPUT_BUFFER_NOT_FILLED) {
                     //continue to receive packet

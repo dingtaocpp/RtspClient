@@ -1,9 +1,13 @@
 package edu.tfnrc.rtp.packet;
 
+import android.os.Environment;
 import android.util.Log;
 import edu.tfnrc.rtp.util.UDPConnection;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Parse the data to RTP packets
@@ -22,6 +26,12 @@ public class RtpPacketReceiver {
     private static int DEFAULT_DATAGRAM_SIZE = 4096;
 
     /**
+    * Another datagram packet size corresponding to
+     * the rtsp-hi3518.
+    * */
+    private static int HI3518_DATAGRAM_SIZE = 1413;
+
+    /**
     * Statistics
     * */
     private RtpStatistics stats = new RtpStatistics();
@@ -34,7 +44,7 @@ public class RtpPacketReceiver {
     /**
      * Buffer size needed to received RTP packet
      */
-    private int bufferSize = DEFAULT_DATAGRAM_SIZE;
+    private int bufferSize = HI3518_DATAGRAM_SIZE;
 
     /**
     * UDP connection
@@ -82,6 +92,16 @@ public class RtpPacketReceiver {
 
             //Parse the RTP packet
             RtpPacket pkt = parseRtpPacket(data);
+
+            //debug
+            Log.i(TAG, "time stamp: " + pkt.timestamp);
+
+            Log.i(TAG, "length: " + pkt.length);
+            Log.i(TAG, "payload length: " + pkt.payloadLength);
+            Log.i(TAG, "marker: " + pkt.marker);
+            Log.i(TAG, "seqnum: " + pkt.seqnum);
+
+
             if(pkt.payloadType != 12){
 
                 //update statistics
@@ -121,6 +141,9 @@ public class RtpPacketReceiver {
     private RtpPacket parseRtpPacket(byte[] data){
 
         RtpPacket packet = new RtpPacket();
+
+//        write(data);
+
         try{
             packet.length = data.length;
 
@@ -141,12 +164,17 @@ public class RtpPacketReceiver {
             packet.seqnum = (short)(((data[2] & 0xff) << 8) | (data[3] & 0xff));
 
             //Read timestamp
-            packet.timestamp = (((data[4] & 0xff) << 24) | ((data[5] & 0xff) << 16)
-                                | ((data[6] & 0xff) << 8) | (data[7] & 0xff));
+//            packet.timestamp = (((data[4] & 0xff) << 24) | ((data[5] & 0xff) << 16)
+//                                | ((data[6] & 0xff) << 8) | (data[7] & 0xff));
+
+            /*Read timestamp from rtsp-hi3518*/
+            packet.timestamp = (((data[8] & 0xff) << 24) | ((data[9] & 0xff) << 16)
+                    | ((data[10] & 0xff) << 8) | (data[11] & 0xff));
 
             //Read SSRC
-            packet.ssrc = (((data[8] & 0xff) << 24) | ((data[9] & 0xff) << 16)
-                    | ((data[10] & 0xff) << 8) | (data[11] & 0xff));
+//            packet.ssrc = (((data[8] & 0xff) << 24) | ((data[9] & 0xff) << 16)
+//                    | ((data[10] & 0xff) << 8) | (data[11] & 0xff));
+            packet.ssrc = 0;
 
             //Read media data after 12 byte header
             packet.payloadOffset = 12;
@@ -162,18 +190,18 @@ public class RtpPacketReceiver {
                     case 26:
                     case 34:
                     case 42:
-                        setRecvBufSize(64000);
+                        setRecvBufSize(HI3518_DATAGRAM_SIZE);
                         break;
                     case 31:
-                        setRecvBufSize(0x1f400);
+                        setRecvBufSize(HI3518_DATAGRAM_SIZE);
                         break;
                     case 32:
-                        setRecvBufSize(0x1f400);
+                        setRecvBufSize(HI3518_DATAGRAM_SIZE);
                         break;
 
                     default:
                         if ((packet.payloadType >= 96) && (packet.payloadType <= 127)) {
-                            setRecvBufSize(64000);
+                            setRecvBufSize(HI3518_DATAGRAM_SIZE);
                         }
                 }
             }
@@ -200,6 +228,21 @@ public class RtpPacketReceiver {
      */
     public UDPConnection getConnection() {
         return connection;
+    }
+
+    private int headerIndex = 0;
+    private void write(byte[] data){
+
+        try{
+            File file = new File(Environment.getExternalStorageDirectory() + "/header",
+                    "" + (headerIndex++)  + "-" + (((data[8] & 0xff) << 24) | ((data[9] & 0xff) << 16)
+                            | ((data[10] & 0xff) << 8) | (data[11] & 0xff)) + (((data[2] & 0xff) << 8) | (data[3] & 0xff)));
+            OutputStream output = new FileOutputStream(file);
+            output.write(data, 0, 12);
+        }catch (Exception e){
+            Log.e(TAG, "failed to write header", e);
+        }
+
     }
 }
 

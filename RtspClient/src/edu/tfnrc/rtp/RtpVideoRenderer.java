@@ -1,5 +1,6 @@
 package edu.tfnrc.rtp;
 
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import edu.tfnrc.rtp.codec.Codec;
@@ -105,13 +106,16 @@ public class RtpVideoRenderer {
      *
      * @throws Exception
      */
-    public RtpVideoRenderer(String uri) throws Exception {
+    public RtpVideoRenderer(String uri, Handler handler) throws Exception {
 
+        Log.d(TAG, "Creating renderer");
         /*
          * The RtspControl opens a connection to an RtspServer, that
          * is determined by the URI provided.
          */
-        rtspControl = new RtspControl(uri);
+        rtspControl = new RtspControl(uri, handler);
+
+        Log.d(TAG, "RtspControl created. State code is " + rtspControl.getState());
 
         /*
          * wait unit the rtspControl has achieved status READY; in this
@@ -126,11 +130,13 @@ public class RtpVideoRenderer {
          * port, the RtspVideoRenderer is listening to
          * (UDP) RTP packets.
          */
+        Log.d(TAG, "Rtsp READY");
 
         // localRtpPort = NetworkRessourceManager.generateLocalRtpPort();
         localRtpPort = rtspControl.getClientPort();
         reservePort(localRtpPort);
 
+        Log.i(TAG, "localRtpPort: " + localRtpPort);
         /*
          * The media resources associated with the SDP descriptor are
          * evaluated and the respective video encoding determined
@@ -188,6 +194,15 @@ public class RtpVideoRenderer {
     }
 
     /**
+     * Returns the local RTSP Control
+     *
+     * @return rtspControl
+     */
+    public RtspControl getRtspControl(){
+        return rtspControl;
+    }
+
+    /**
      * Reserve a port.
      *
      * @param port the port to reserve
@@ -196,10 +211,12 @@ public class RtpVideoRenderer {
 
         if (temporaryConnection != null) return;
         try {
+            temporaryConnection = new UDPConnection();
             temporaryConnection.open(port);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             temporaryConnection = null;
+            Log.e(TAG, "failed to open port " + port, e);
         }
 
     }
@@ -266,24 +283,25 @@ public class RtpVideoRenderer {
 //            return;
 //        }
 
-        try {
-            //Init the video decoder
-            int result = 0;
+//        try {
+//            //Init the video decoder
+//            int result = 0;
 //            if(selectedVideoCodec.getCodecName().equalsIgnoreCase(H264Config.CODEC_NAME))
-            //TODO:native method of decoder
+//            //TODO:native method of decoder
 //                result = NativeH264Decoder.InitDecoder();
-
-            if (result == 0) {
-                Log.e(TAG, "Decoder init failed with error code: " + result);
-
-                return;
-            }
-        } catch (UnsatisfiedLinkError e) {
-            Log.e(TAG, "Decoder error: " + e.getMessage());
-            return;
-        }
+//
+//            if (result == 0) {
+//                Log.e(TAG, "Decoder init failed with error code: " + result);
+//
+//                return;
+//            }
+//        } catch (UnsatisfiedLinkError e) {
+//            Log.e(TAG, "Decoder error: " + e.getMessage());
+//            return;
+//        }
 
         try{
+            Log.d(TAG, "init RTP layer");
             //init RTP layer
             releasePort();
 

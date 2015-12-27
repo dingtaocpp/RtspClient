@@ -48,7 +48,6 @@ public class MediaRtpReceiver {
 
             //output stream
             outputStream = output;
-            outputStream.open();
 
             Log.d(TAG, "Output stream: " + outputStream.getClass().getName());
 

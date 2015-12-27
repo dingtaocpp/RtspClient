@@ -26,4 +26,13 @@ public interface ProcessorInputStream {
      * @throws Exception
      */
     public Buffer read() throws Exception;
+
+    /**
+     * Read from the input stream without blocking
+     * put data into the parameter buffer
+     *
+     * @param buffer
+     * @throws Exception
+     */
+    public void read(Buffer buffer) throws Exception;
 }

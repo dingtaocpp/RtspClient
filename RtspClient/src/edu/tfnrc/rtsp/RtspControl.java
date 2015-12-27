@@ -36,12 +36,12 @@ public class RtspControl implements RequestListener{
     private int state;
 
     /**
-     * This constructor is invoked with an uri that
+     * This init method used in constructor is invoked with an uri that
      * describes the server uri and also a certain
      * resource
      */
 
-    public RtspControl(String uri){
+    private void init(String uri){
 
         int pos = uri.lastIndexOf("/");
 
@@ -63,14 +63,40 @@ public class RtspControl implements RequestListener{
                 e.printStackTrace();
         }
     }
+    public RtspControl(String uri, Handler handler){
 
+        int pos = uri.lastIndexOf("/");
+
+        try{
+            this.uri = new URI(uri.substring(0, pos));
+            this.resource = uri.substring(pos + 1);
+
+            this.client = new RtspClient();
+            this.client.setTransport(new TCPTransport());
+            this.client.setRequestListener(this);
+
+            this.client.setHandler(handler);
+
+            this.state = RtspConstants.UNDEFINED;
+
+            this.client.options("*", this.uri);
+        }catch (Exception e){
+            if(this.client != null)
+                onError(this.client, e);
+            else
+                e.printStackTrace();
+        }
+    }
+
+    public RtspControl(String uri){
+        init(uri);
+    }
     public RtspControl(String uri, String resource, Handler handler){
 
         try{
             this.uri = new URI(uri);
             this.resource = resource;
 
-            Log.d(TAG, "new RtspControl");
 
             this.client = new RtspClient();
             this.client.setTransport(new TCPTransport());
@@ -140,6 +166,8 @@ public class RtspControl implements RequestListener{
     //TODO:parameters are never used
     public void onError(RtspClient client, Throwable error) {
 
+        Log.d(TAG, "onError");
+
         if ((this.client != null) && this.connected) {
             this.client.teardown();
         }
@@ -153,10 +181,13 @@ public class RtspControl implements RequestListener{
 
     // register SDP file
     public void onDescriptor(RtspClient client, String descriptor) {
+
         this.rtspDescriptor = new RtspDescriptor(descriptor);
     }
 
     public void onFailure(RtspClient client, Request request, Throwable cause) {
+
+        Log.d(TAG, "onFailure");
 
         if ((this.client != null) && (this.connected == true)) {
             this.client.teardown();
@@ -175,8 +206,6 @@ public class RtspControl implements RequestListener{
             Log.d(TAG, "onSuccess");
 
             if((this.client != null) && (response.getStatusCode() == 200)) {
-
-                Log.d(TAG, "state code= 200");
 
                 Request.Method method = request.getMethod();
                 if (method == Request.Method.OPTIONS) {
@@ -197,9 +226,6 @@ public class RtspControl implements RequestListener{
                     RtspMedia video = this.rtspDescriptor.getFirstVideo();
                     if (video != null) {
                         this.port = Integer.valueOf(video.getTransportPort());
-
-                        //debug
-                        Log.d(TAG, "video port= " + this.port);
 
                         //send SETUP request
                         this.client.setup(this.uri, this.port, this.resource);
