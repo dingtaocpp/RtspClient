@@ -65,7 +65,7 @@ public class FrameAssembler extends Codec{
      */
     static class Frame{
 
-        private static final int DEAFAULT_CAPACITY = 8;
+        private static final int DEAFAULT_CAPACITY = 16;
 
         //output to file for debug
         private static OutputToFile output = new OutputToFile("frameOutput");

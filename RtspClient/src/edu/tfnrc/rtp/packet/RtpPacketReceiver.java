@@ -29,7 +29,7 @@ public class RtpPacketReceiver {
     * Another datagram packet size corresponding to
      * the rtsp-hi3518.
     * */
-    private static int HI3518_DATAGRAM_SIZE = 1413;
+    private static int HI3518_DATAGRAM_SIZE = 1414;
 
     /**
     * Statistics
@@ -177,7 +177,7 @@ public class RtpPacketReceiver {
             packet.ssrc = 0;
 
             //Read media data after 12 byte header
-            packet.payloadOffset = 12;
+            packet.payloadOffset = 14;
             packet.payloadLength = packet.length - packet.payloadOffset;
             packet.data = new byte[packet.payloadLength];
             System.arraycopy(data, packet.payloadOffset, packet.data, 0, packet.payloadLength);
