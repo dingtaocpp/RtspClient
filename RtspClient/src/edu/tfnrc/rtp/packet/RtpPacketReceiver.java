@@ -20,6 +20,11 @@ public class RtpPacketReceiver {
     private static final String TAG = "RtpPacketReceiver";
 
     /**
+    * RTP header length should be constant of 12
+    * */
+    private static final int RTP_HEADER_LENGTH = 12;
+
+    /**
     * Max datagram packet size.
     * The size may be variable.
     * */
@@ -177,10 +182,29 @@ public class RtpPacketReceiver {
             packet.ssrc = 0;
 
             //Read media data after 12 byte header
-            packet.payloadOffset = 14;
+            //Read fu-indicator and fu-header
+            byte head1 = data[RTP_HEADER_LENGTH], head2 = data[RTP_HEADER_LENGTH + 1];
+
+            Log.i(TAG, "head1: " + head1 + "\thead2: " + head2);
+            boolean isFirstFu = false;   //if the data is the first packet in a split frame
+            if((head1 & 0x1f) == 28){  //frame is split
+
+                if((head2 & 0xe0) == 0x80){   //the first packet of a frame
+                    packet.payloadOffset = RTP_HEADER_LENGTH + 1;
+                    isFirstFu = true;
+                }else {
+                    packet.payloadOffset = RTP_HEADER_LENGTH + 2;
+                }
+
+            } else {        //One frame in one packet
+                packet.payloadOffset = RTP_HEADER_LENGTH;
+            }
             packet.payloadLength = packet.length - packet.payloadOffset;
             packet.data = new byte[packet.payloadLength];
             System.arraycopy(data, packet.payloadOffset, packet.data, 0, packet.payloadLength);
+
+            if(isFirstFu)
+                packet.data[0] = (byte)((head1 & 0xe0) | (head2 & 0x1f));
 
             // Update the buffer size
             if (!recvBufSizeSet) {

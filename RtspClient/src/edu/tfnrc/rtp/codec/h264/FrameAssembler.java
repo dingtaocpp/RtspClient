@@ -27,7 +27,7 @@ public class FrameAssembler extends Codec{
     /**
      * Max frame size to give for next module, as some decoder have frame size limits
      */
-    private static int MAX_H264P_FRAME_SIZE = 20480;//TODO: to be tested
+    private static int MAX_H264P_FRAME_SIZE = 50720;//TODO: to be tested
 
 
 
@@ -211,7 +211,7 @@ public class FrameAssembler extends Codec{
             if(data.length <= 0)
                 throw new IllegalStateException();
 
-            if(data.length <= MAX_H264P_FRAME_SIZE){
+//            if(data.length <= MAX_H264P_FRAME_SIZE){
 
 
                 output.setData(data);
@@ -221,7 +221,7 @@ public class FrameAssembler extends Codec{
                 output.setSequenceNumber(0L);
                 output.setFormat(format);
                 output.setFlags(Buffer.FLAG_RTP_MARKER | Buffer.FLAG_RTP_TIME);
-            }
+//            }
         }
 
 

@@ -12,7 +12,7 @@ import java.net.InetAddress;
  */
 public class UDPConnection {
 
-    public static int DEFAULT_DATAGRAM_SIZE = 4096 * 8;
+    public static int DEFAULT_DATAGRAM_SIZE = 4096;
 
     private DatagramSocket socket = null;
 
