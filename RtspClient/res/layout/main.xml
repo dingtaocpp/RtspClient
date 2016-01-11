@@ -6,48 +6,27 @@
         >
     <TextView
             android:layout_width="fill_parent"
-            android:layout_height="96dp"
+            android:layout_height="150dp"
             android:id="@+id/requestView"/>
     <TextView android:layout_width="match_parent" android:layout_height="96dp"
-              android:layout_below="@+id/requestView"
-            android:id="@+id/responseView"/>
+              android:id="@+id/responseView"
+              android:layout_alignParentStart="true"
+              android:layout_above="@+id/buttonStart" android:layout_below="@+id/requestView"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Setup"
-            android:id="@+id/buttonSetup"
-            android:layout_below="@+id/responseView" android:layout_alignParentStart="true"
-            android:layout_marginTop="74dp"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Options"
-            android:id="@+id/buttonOptions"
-            android:layout_alignTop="@+id/buttonSetup" android:layout_centerHorizontal="true"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Describe"
-            android:id="@+id/buttonDescribe"
-            android:layout_alignTop="@+id/buttonOptions" android:layout_alignParentEnd="true"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Play"
-            android:id="@+id/buttonPlay"
-            android:layout_below="@+id/buttonSetup" android:layout_alignParentStart="true"
-            android:layout_marginTop="36dp"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pause"
-            android:id="@+id/buttonPause" android:layout_alignBottom="@+id/buttonPlay" android:layout_centerHorizontal="true"/>
+            android:text="start"
+            android:id="@+id/buttonStart"
+            android:layout_marginStart="67dp"
+            android:layout_marginBottom="68dp" android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Stop"
-            android:id="@+id/buttonStop" android:layout_alignBottom="@+id/buttonPause"
-            android:layout_alignEnd="@+id/buttonDescribe"/>
+            android:id="@+id/buttonStop"
+            android:layout_alignTop="@+id/buttonStart" android:layout_alignParentEnd="true"
+            android:layout_marginEnd="55dp"/>
 
 
 </RelativeLayout>
