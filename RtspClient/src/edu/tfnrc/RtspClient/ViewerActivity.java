@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import edu.tfnrc.rtp.RtpVideoRenderer;
+import edu.tfnrc.rtp.media.video.VideoSurfaceView;
 import edu.tfnrc.rtsp.RtspControl;
 import edu.tfnrc.rtsp.RtspControlTest;
 
@@ -27,6 +28,8 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
     public TextView requestView, responseView;
 
     private RtpVideoRenderer incomingRenderer = null;
+
+    private VideoSurfaceView surfaceView = null;
 
     private String uri = "rtsp://192.168.2.1:6880/";
 
@@ -65,6 +68,7 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
                 public void run() {
                     try {
                         incomingRenderer = new RtpVideoRenderer(uri, handler);
+//               TODO:         incomingRenderer.setVideoSurface(surfaceView);
                         Log.d(TAG, "new Renderer");
                     } catch (Exception e) {
                         Log.e(TAG, "fail to new Renderer", e);

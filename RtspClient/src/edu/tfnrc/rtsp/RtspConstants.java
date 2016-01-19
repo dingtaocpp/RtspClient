@@ -41,4 +41,7 @@ public class RtspConstants {
     //д╛хо720P
     public static VideoSize videoSize = new VideoSize();
 
+    public static VideoSize getVideoSize(){
+        return videoSize;
+    }
 }

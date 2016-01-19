@@ -1,18 +1,22 @@
 package edu.tfnrc.rtp;
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import edu.tfnrc.rtp.codec.Codec;
+import edu.tfnrc.rtp.codec.h264.NativeH264Decoder;
 import edu.tfnrc.rtp.media.format.Format;
 import edu.tfnrc.rtp.media.format.H264VideoFormat;
 import edu.tfnrc.rtp.media.format.VideoFormat;
 import edu.tfnrc.rtp.media.video.VideoSurfaceView;
 import edu.tfnrc.rtp.stream.OutputToFile;
 import edu.tfnrc.rtp.stream.ProcessorOutputStream;
+import edu.tfnrc.rtp.util.Buffer;
 import edu.tfnrc.rtp.util.UDPConnection;
 import edu.tfnrc.rtsp.RtspConstants;
 import edu.tfnrc.rtsp.RtspControl;
+import edu.tfnrc.rtsp.VideoSize;
 import edu.tfnrc.rtsp.message.RtspDescriptor;
 import edu.tfnrc.rtsp.message.RtspMedia;
 
@@ -275,18 +279,10 @@ public class RtpVideoRenderer {
 
         if (opened) return; //already opened
 
-        // Check video codec
-//        if (selectedVideoCodec == null) {
-//            if (logger.isActivated()) {
-//                logger.debug("Player error: Video Codec not selected");
-//            }
-//            return;
-//        }
 
 //        try {
 //            //Init the video decoder
 //            int result = 0;
-//            if(selectedVideoCodec.getCodecName().equalsIgnoreCase(H264Config.CODEC_NAME))
 //            //TODO:native method of decoder
 //                result = NativeH264Decoder.InitDecoder();
 //
@@ -305,7 +301,7 @@ public class RtpVideoRenderer {
             //init RTP layer
             releasePort();
 
-//  TODO:          rtpOutput = new MediaRtpOutput();
+//  TODO:          rtpOutput = new VideoOutput();
             rtpOutput = new OutputToFile("rtpoutput");
             rtpOutput.open();
 
@@ -402,8 +398,46 @@ public class RtpVideoRenderer {
     /**
      * TODO: Media RTP output
      */
-//    private class MediaRtpOutput implements ProcessorOutputStream{
-//
-//    }
+    private class MediaRtpOutput implements ProcessorOutputStream{
+
+        /**
+         * Video frame
+         */
+        private int decodedFrame[];
+
+        /**
+         * Bitmap frame
+         */
+        private Bitmap rgbFrame;
+
+        VideoSize videoSize = RtspConstants.getVideoSize();
+        public MediaRtpOutput(){
+            decodedFrame = new int[videoSize.getWidth() * videoSize.getHeight()];
+            rgbFrame     = Bitmap.createBitmap(videoSize.getWidth(), videoSize.getHeight(), Bitmap.Config.ARGB_8888);
+        }
+        @Override
+        public void open() throws Exception {
+        }
+
+        @Override
+        public void write(Buffer buffer) throws Exception {
+
+            if (NativeH264Decoder.DecodeAndConvert((byte[])buffer.getData(), decodedFrame) == 1) {
+                rgbFrame.setPixels(decodedFrame, 0, videoSize.getWidth(), 0, 0,
+                        videoSize.getWidth(), videoSize.getHeight());
+
+                if (surface != null) {
+                    surface.setImage(rgbFrame);
+                }
+            } else {
+                Log.e(TAG, "MediaRtpOutput.writeSample: cannot decode sample >len:" + buffer.getLength());
+            }
+        }
+
+        @Override
+        public void close() {
+        }
+
+    }
 
 }
