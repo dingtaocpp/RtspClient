@@ -249,7 +249,7 @@ int yuv2rgb_c_init_tables(MySwsContext *c, const int inv_table[4],
 	int64_t oy = 0;
 	int64_t yb = 0;
 	
-	if(!fullRange) {	//fullRange = srcRange = 0
+	if(!fullRange) {	//fullRange = srcRange = 1
 		cy = (cy * 255)/219;
 		oy = 16 << 16;
 	} else {
@@ -340,7 +340,7 @@ MySwsContext * sws_getContext(int srcW, int srcH, enum PixelFormat srcFormat, in
     switch(srcFormat){
     case PIX_FMT_YUV420P:
     	c->srcFormatBpp = 12;
-    	c->srcRange = 0;
+    	c->srcRange = 1;
     	break;
     default:
     	c->srcFormatBpp = 12;
