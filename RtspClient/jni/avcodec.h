@@ -167,27 +167,54 @@ enum CodecType {
  * to run on the IBM VGA graphics adapter use 6-bit palette components.
  */
 enum PixelFormat {
-    PIX_FMT_YUV420P,   ///< Planar YUV 4:2:0 (1 Cr & Cb sample per 2x2 Y samples)
-    PIX_FMT_YUV422,    
-    PIX_FMT_RGB24,     ///< Packed pixel, 3 bytes per pixel, RGBRGB...
-    PIX_FMT_BGR24,     ///< Packed pixel, 3 bytes per pixel, BGRBGR...
-    PIX_FMT_YUV422P,   ///< Planar YUV 4:2:2 (1 Cr & Cb sample per 2x1 Y samples)
-    PIX_FMT_YUV444P,   ///< Planar YUV 4:4:4 (1 Cr & Cb sample per 1x1 Y samples)
-    PIX_FMT_RGBA32,    ///< Packed pixel, 4 bytes per pixel, BGRABGRA..., stored in cpu endianness
-    PIX_FMT_YUV410P,   ///< Planar YUV 4:1:0 (1 Cr & Cb sample per 4x4 Y samples)
-    PIX_FMT_YUV411P,   ///< Planar YUV 4:1:1 (1 Cr & Cb sample per 4x1 Y samples)
-    PIX_FMT_RGB565,    ///< always stored in cpu endianness 
-    PIX_FMT_RGB555,    ///< always stored in cpu endianness, most significant bit to 1 
-    PIX_FMT_GRAY8,
-    PIX_FMT_MONOWHITE, ///< 0 is white 
-    PIX_FMT_MONOBLACK, ///< 0 is black 
-    PIX_FMT_PAL8,      ///< 8 bit with RGBA palette 
-    PIX_FMT_YUVJ420P,  ///< Planar YUV 4:2:0 full scale (jpeg)
-    PIX_FMT_YUVJ422P,  ///< Planar YUV 4:2:2 full scale (jpeg)
-    PIX_FMT_YUVJ444P,  ///< Planar YUV 4:4:4 full scale (jpeg)
-    PIX_FMT_XVMC_MPEG2_MC,///< XVideo Motion Acceleration via common packet passing(xvmc_render.h)
-    PIX_FMT_XVMC_MPEG2_IDCT,
-    PIX_FMT_NB,
+    PIX_FMT_NONE = -1,
+	PIX_FMT_YUV420P,   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)  
+	PIX_FMT_YUYV422,   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr  
+	PIX_FMT_RGB24,     ///< packed RGB 8:8:8, 24bpp, RGBRGB...  
+	PIX_FMT_BGR24,     ///< packed RGB 8:8:8, 24bpp, BGRBGR...  
+	PIX_FMT_RGB555,
+	PIX_FMT_RGB565,
+
+	PIX_FMT_YUV422P,   ///< planar YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)  
+	PIX_FMT_YUV444P,   ///< planar YUV 4:4:4, 24bpp, (1 Cr & Cb sample per 1x1 Y samples)  
+	PIX_FMT_YUV410P,   ///< planar YUV 4:1:0,  9bpp, (1 Cr & Cb sample per 4x4 Y samples)  
+	PIX_FMT_YUV411P,   ///< planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples)  
+	PIX_FMT_GRAY8,     ///<        Y        ,  8bpp  
+	PIX_FMT_MONOWHITE, ///<        Y        ,  1bpp, 0 is white, 1 is black, in each byte pixels are ordered from the msb to the lsb  
+	PIX_FMT_MONOBLACK, ///<        Y        ,  1bpp, 0 is black, 1 is white, in each byte pixels are ordered from the msb to the lsb  
+	PIX_FMT_PAL8,      ///< 8 bit with PIX_FMT_RGB32 palette  
+	PIX_FMT_YUVJ420P,  ///< planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV420P and setting color_range  
+	PIX_FMT_YUVJ422P,  ///< planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV422P and setting color_range  
+	PIX_FMT_YUVJ444P,  ///< planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV444P and setting color_range  
+	PIX_FMT_XVMC_MPEG2_MC,///< XVideo Motion Acceleration via common packet passing  
+	PIX_FMT_XVMC_MPEG2_IDCT,
+	PIX_FMT_UYVY422,   ///< packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1  
+	PIX_FMT_UYYVYY411, ///< packed YUV 4:1:1, 12bpp, Cb Y0 Y1 Cr Y2 Y3  
+	PIX_FMT_BGR8,      ///< packed RGB 3:3:2,  8bpp, (msb)2B 3G 3R(lsb)  
+	PIX_FMT_BGR4,      ///< packed RGB 1:2:1 bitstream,  4bpp, (msb)1B 2G 1R(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits  
+	PIX_FMT_BGR4_BYTE, ///< packed RGB 1:2:1,  8bpp, (msb)1B 2G 1R(lsb)  
+	PIX_FMT_RGB8,      ///< packed RGB 3:3:2,  8bpp, (msb)2R 3G 3B(lsb)  
+	PIX_FMT_RGB4,      ///< packed RGB 1:2:1 bitstream,  4bpp, (msb)1R 2G 1B(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits  
+	PIX_FMT_RGB4_BYTE, ///< packed RGB 1:2:1,  8bpp, (msb)1R 2G 1B(lsb)  
+	PIX_FMT_NV12,      ///< planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved (first byte U and the following byte V)  
+	PIX_FMT_NV21,      ///< as above, but U and V bytes are swapped  
+
+	PIX_FMT_ARGB,      ///< packed ARGB 8:8:8:8, 32bpp, ARGBARGB...  
+	PIX_FMT_RGBA,      ///< packed RGBA 8:8:8:8, 32bpp, RGBARGBA...  
+	PIX_FMT_ABGR,      ///< packed ABGR 8:8:8:8, 32bpp, ABGRABGR...  
+	PIX_FMT_BGRA,      ///< packed BGRA 8:8:8:8, 32bpp, BGRABGRA...  
+
+	PIX_FMT_GRAY16BE,  ///<        Y        , 16bpp, big-endian  
+	PIX_FMT_GRAY16LE,  ///<        Y        , 16bpp, little-endian  
+	PIX_FMT_YUV440P,   ///< planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples)  
+	PIX_FMT_YUVJ440P,  ///< planar YUV 4:4:0 full scale (JPEG), deprecated in favor of PIX_FMT_YUV440P and setting color_range  
+	PIX_FMT_YUVA420P,  ///< planar YUV 4:2:0, 20bpp, (1 Cr & Cb sample per 2x2 Y & A samples)  
+	PIX_FMT_VDPAU_H264,///< H.264 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers  
+	PIX_FMT_VDPAU_MPEG1,///< MPEG-
+
+	PIX_FMT_RGBA32,
+	PIX_FMT_YUV422,
+	PIX_FMT_NB,
 };
 
 /* currently unused, may be used if 24/32 bits samples ever supported */

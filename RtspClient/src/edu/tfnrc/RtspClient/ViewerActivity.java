@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,12 +45,19 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //set window full screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Window win = getWindow();
+        win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
 
-        requestView = (TextView)findViewById(R.id.requestView);
-        responseView = (TextView)findViewById(R.id.responseView);
+//        requestView = (TextView)findViewById(R.id.requestView);
+//        responseView = (TextView)findViewById(R.id.responseView);
 //        controlTest = new RtspControl(uri, resource);
 //        controlTest.getClient().setHandler(handler);
+        surfaceView = (VideoSurfaceView)findViewById(R.id.videoSurface);
 
         buttonStart  = (Button)findViewById(R.id.buttonStart);
         buttonStop   = (Button)findViewById(R.id.buttonStop);
@@ -67,8 +76,8 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void run() {
                     try {
-                        incomingRenderer = new RtpVideoRenderer(uri, handler);
-//               TODO:         incomingRenderer.setVideoSurface(surfaceView);
+                        incomingRenderer = new RtpVideoRenderer(uri);
+                        incomingRenderer.setVideoSurface(surfaceView);
                         Log.d(TAG, "new Renderer");
                     } catch (Exception e) {
                         Log.e(TAG, "fail to new Renderer", e);
@@ -79,14 +88,14 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    Handler handler = new Handler(){
-        public void handleMessage(android.os.Message msg){
-            if(msg.what == 0)
-                requestView.setText((String)msg.obj);
-            else if(msg.what == 1)
-                responseView.setText((String)msg.obj);
-        }
-    };
+//    Handler handler = new Handler(){
+//        public void handleMessage(android.os.Message msg){
+//            if(msg.what == 0)
+//                requestView.setText((String)msg.obj);
+//            else if(msg.what == 1)
+//                responseView.setText((String)msg.obj);
+//        }
+//    };
 
     @Override
     public void onClick(View v) {
@@ -131,6 +140,13 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
 //        }
 //    }
 
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        incomingRenderer.open();
+//        incomingRenderer.start();
+//    }
 
     @Override
     public void onDestroy() {

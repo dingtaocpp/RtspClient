@@ -83,6 +83,7 @@ public class Processor extends Thread {
     public void run(){
         try{
             Log.d(TAG, "Processing is started");
+            int cnt = 0;    //outputBuffer计数
 
             Buffer outputBuffer = null;
             //read packets and deal with them
@@ -103,7 +104,8 @@ public class Processor extends Thread {
                 if(result == Codec.BUFFER_PROCESSED_OK){
 
                     //output buffer written to the surface view
-
+                    cnt++;
+                    Log.i(TAG, "Buffer No." + cnt + " length: " + outputBuffer.getLength());
                     outputStream.write(outputBuffer);
                 }else if(result == Codec.OUTPUT_BUFFER_NOT_FILLED) {
                     //continue to receive packet

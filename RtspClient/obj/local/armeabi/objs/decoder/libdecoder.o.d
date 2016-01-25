@@ -47,6 +47,7 @@
  /cygdrive/f/IdeaProjects/RtspClient/jni/rational.h \
  /cygdrive/f/IdeaProjects/RtspClient/jni/edu_tfnrc_rtp_codec_h264_NativeH264Decoder.h \
  /cygdrive/f/IdeaProjects/RtspClient/jni/h264.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/myyuv2rgb.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/android/log.h
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/stdio.h:
@@ -142,5 +143,7 @@
 /cygdrive/f/IdeaProjects/RtspClient/jni/edu_tfnrc_rtp_codec_h264_NativeH264Decoder.h:
 
 /cygdrive/f/IdeaProjects/RtspClient/jni/h264.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/myyuv2rgb.h:
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/android/log.h:

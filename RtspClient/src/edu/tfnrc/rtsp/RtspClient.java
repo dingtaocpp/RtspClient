@@ -25,7 +25,7 @@ import java.util.Map;
 public class RtspClient implements TransportListener {
 
     //Debug
-    private Handler mhandler;
+//    private Handler mhandler;
     //Debug
 
     private static final String TAG = "RtspClient";
@@ -319,13 +319,13 @@ public class RtspClient implements TransportListener {
     public void print(Message message){
         String messageString = message.toString();
         Log.i(TAG, "print message: " + messageString);
-        mhandler.obtainMessage(message instanceof RtspResponse? 1 : 0 , 0, 0, messageString)
-                .sendToTarget();
+//        mhandler.obtainMessage(message instanceof RtspResponse? 1 : 0 , 0, 0, messageString)
+//                .sendToTarget();
 
     }
 
-    public void setHandler(Handler handler){
-        mhandler = handler;
-    }
+//    public void setHandler(Handler handler){
+//        mhandler = handler;
+//    }
 
 }

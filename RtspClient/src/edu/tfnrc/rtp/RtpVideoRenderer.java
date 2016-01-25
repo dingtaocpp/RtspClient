@@ -36,6 +36,10 @@ public class RtpVideoRenderer {
     //debug
     private static final String TAG = "RtpVideoRenderer";
 
+    static{
+        System.loadLibrary("decoder");
+    }
+
     /**
      * List of supported video codecs
      * */
@@ -110,14 +114,14 @@ public class RtpVideoRenderer {
      *
      * @throws Exception
      */
-    public RtpVideoRenderer(String uri, Handler handler) throws Exception {
+    public RtpVideoRenderer(String uri/*, Handler handler*/) throws Exception {
 
         Log.d(TAG, "Creating renderer");
         /*
          * The RtspControl opens a connection to an RtspServer, that
          * is determined by the URI provided.
          */
-        rtspControl = new RtspControl(uri, handler);
+        rtspControl = new RtspControl(uri);
 
         Log.d(TAG, "RtspControl created. State code is " + rtspControl.getState());
 
@@ -280,29 +284,29 @@ public class RtpVideoRenderer {
         if (opened) return; //already opened
 
 
-//        try {
-//            //Init the video decoder
-//            int result = 0;
-//            //TODO:native method of decoder
-//                result = NativeH264Decoder.InitDecoder();
-//
-//            if (result == 0) {
-//                Log.e(TAG, "Decoder init failed with error code: " + result);
-//
-//                return;
-//            }
-//        } catch (UnsatisfiedLinkError e) {
-//            Log.e(TAG, "Decoder error: " + e.getMessage());
-//            return;
-//        }
+        try {
+            //Init the video decoder
+            int result = 0;
+            //TODO:native method of decoder
+                result = NativeH264Decoder.initDecoder();
+
+            if (result != 0) {
+                Log.e(TAG, "Decoder init failed with error code: " + result);
+
+                return;
+            }
+        } catch (UnsatisfiedLinkError e) {
+            Log.e(TAG, "Decoder error: " + e.getMessage());
+            return;
+        }
 
         try{
             Log.d(TAG, "init RTP layer");
             //init RTP layer
             releasePort();
 
-//  TODO:          rtpOutput = new VideoOutput();
-            rtpOutput = new OutputToFile("rtpoutput");
+            rtpOutput = new MediaRtpOutput();
+//            rtpOutput = new OutputToFile("rtpoutput");
             rtpOutput.open();
 
             rtpReceiver = new MediaRtpReceiver(localRtpPort);
@@ -332,13 +336,13 @@ public class RtpVideoRenderer {
         if (rtpOutput != null) rtpOutput.close();
 
         // TODO: close the video decoder
-//      closeVideoDecoder();
+      closeVideoDecoder();
 
         opened = false;
     }
 
     public void closeVideoDecoder(){
-
+        NativeH264Decoder.DeinitDecoder();
     }
 
     /**
@@ -384,8 +388,8 @@ public class RtpVideoRenderer {
 
         if (rtpOutput != null) rtpOutput.close();
 
-        // TODO: Force black screen
-//        surface.clearImage();
+        //Force black screen
+        surface.clearImage();
 
         // Close the video decoder
         closeVideoDecoder();
@@ -417,6 +421,7 @@ public class RtpVideoRenderer {
         }
         @Override
         public void open() throws Exception {
+            surface.setAspectRatio(1280, 720);
         }
 
         @Override

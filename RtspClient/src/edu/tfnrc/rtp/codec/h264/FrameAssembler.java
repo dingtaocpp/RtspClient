@@ -68,7 +68,7 @@ public class FrameAssembler extends Codec{
         private static final int DEAFAULT_CAPACITY = 16;
 
         //output to file for debug
-        private static OutputToFile output = new OutputToFile("frameOutput");
+//        private static OutputToFile output = new OutputToFile("frameOutput");
 
         //a buffer array
         private Buffer[] buffers = null;
@@ -103,11 +103,11 @@ public class FrameAssembler extends Codec{
         public Frame(long timeStamp){
             this.timeStamp = timeStamp;
             buffers = new Buffer[DEAFAULT_CAPACITY];
-            try{
+            /*try{
                 output.open();
             }catch (Exception e){
                 Log.e(TAG, "output open fail", e);
-            }
+            }*/
         }
 
         /**
@@ -155,15 +155,11 @@ public class FrameAssembler extends Codec{
 //                    Log.e(TAG, "failed to output", e);
 //                }
 
-                    Log.i(TAG, "TimeStamp: " + timeStamp + "\tsize: " + size
-                            + "\tSeqnum: " + seqnum);
-//                    for(int i = 0; i < size; ++i)
-//                        Log.i(TAG, "buffers[" + i + "].seqnum: " + buffers[i].getSequenceNumber());
+                   /* Log.i(TAG, "TimeStamp: " + timeStamp + "\tsize: " + size
+                            + "\tSeqnum: " + seqnum);*/
 
                     if (buffer.isRTPMarkerSet()) {
-                        //TODO: if there are several true marker(almost impossible)
                         endPos = seqnum;
-//                        Log.d(TAG, "endPos: " + endPos);
                     }
                 }
 
@@ -178,12 +174,9 @@ public class FrameAssembler extends Codec{
         //assemble the buffer array to the data
         private byte[] assembleBytes(){
 
-                Log.d(TAG, "start assembling");
-
                 sortBuffers();
                 byte[] data = new byte[dataLength];
                 for (int i = 0, offset = 0; i < size; ++i) {
-                    Log.i(TAG, "seqnum: " + buffers[i].getSequenceNumber());
                     System.arraycopy((byte[]) buffers[i].getData(), buffers[i].getOffset(), data, offset, buffers[i].getLength());
                     offset += buffers[i].getLength();
                 }

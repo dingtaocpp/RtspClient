@@ -119,6 +119,8 @@ int avpicture_fill(AVPicture *picture, uint8_t *ptr,
         picture->linesize[0] = width * 3;
         return size * 3;
     case PIX_FMT_RGBA32:
+    case PIX_FMT_ARGB:
+	case PIX_FMT_ABGR:
         picture->data[0] = ptr;
         picture->data[1] = NULL;
         picture->data[2] = NULL;

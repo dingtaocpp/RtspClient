@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -12,6 +13,8 @@ import android.view.SurfaceView;
  */
 public class VideoSurfaceView extends SurfaceView{
 
+    //debug
+    private static final String TAG = "VideoSurfaceView";
     /**
      * No aspect ratio ×Ýºá±È
      */
@@ -94,6 +97,7 @@ public class VideoSurfaceView extends SurfaceView{
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
+        Log.d(TAG, "on Measure");
         if(aspectRatio != NO_RATIO){
             int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
             int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
@@ -112,6 +116,8 @@ public class VideoSurfaceView extends SurfaceView{
                 width = Math.min(width, widthSpecSize);
                 height = Math.min(height, heightSpecSize);
                 setMeasuredDimension(width, height);
+
+                Log.i(TAG, "set ratio:" + aspectRatio);
                 return;
             }
         }
@@ -124,7 +130,9 @@ public class VideoSurfaceView extends SurfaceView{
      * @param bmp Bitmap
      */
     public void setImage(Bitmap bmp){
+
         if(surfaceCreated){
+
             Canvas canvas = null;
             try{
                 synchronized(holder){
@@ -132,6 +140,7 @@ public class VideoSurfaceView extends SurfaceView{
                 }
             }finally{
                 if(canvas != null){
+                    Log.d(TAG, "canvas draw");
                     //Clear screen first
                     //TODO: is neccesary???
                     canvas.drawARGB(255, 0, 0, 0);
@@ -163,6 +172,7 @@ public class VideoSurfaceView extends SurfaceView{
      * Init the view
      */
     private void init() {
+        Log.d(TAG, "init");
         // Get a surface holder
         holder = this.getHolder();
         holder.addCallback(surfaceCallback);
@@ -179,6 +189,7 @@ public class VideoSurfaceView extends SurfaceView{
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            Log.i(TAG, "Width: " + width + " Height: " + height);
 
         }
 

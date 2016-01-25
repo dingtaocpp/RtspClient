@@ -75,7 +75,7 @@ public class RtspControl implements RequestListener{
             this.client.setTransport(new TCPTransport());
             this.client.setRequestListener(this);
 
-            this.client.setHandler(handler);
+//            this.client.setHandler(handler);
 
             this.state = RtspConstants.UNDEFINED;
 
@@ -102,7 +102,7 @@ public class RtspControl implements RequestListener{
             this.client.setTransport(new TCPTransport());
             this.client.setRequestListener(this);
 
-            this.client.setHandler(handler);
+//            this.client.setHandler(handler);
 
             this.state = RtspConstants.UNDEFINED;
 

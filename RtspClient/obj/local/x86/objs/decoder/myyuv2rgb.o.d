@@ -1,9 +1,15 @@
-/cygdrive/f/IdeaProjects/RtspClient/obj/local/x86/objs/decoder/libdecoder.o: \
- /cygdrive/f/IdeaProjects/RtspClient/jni/libdecoder.c \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/stdio.h \
+/cygdrive/f/IdeaProjects/RtspClient/obj/local/x86/objs/decoder/myyuv2rgb.o: \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/myyuv2rgb.c \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/common.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/config.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/stdlib.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/cdefs.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/cdefs_elf.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/android/api-level.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/string.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/malloc.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/alloca.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/strings.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/types.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/stdint.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/_types.h \
@@ -18,16 +24,8 @@
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/linux/types.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/machine/kernel.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/sysmacros.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/jni.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/stdlib.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/string.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/malloc.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/alloca.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/strings.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/memory.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/avcodec.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/common.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/config.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/stdio.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/ctype.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/limits.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/limits.h \
@@ -46,19 +44,29 @@
  /cygdrive/f/IdeaProjects/RtspClient/jni/bswap.h \
  /cygdrive/f/IdeaProjects/RtspClient/jni/inttypes.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/assert.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/rational.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/edu_tfnrc_rtp_codec_h264_NativeH264Decoder.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/h264.h \
  /cygdrive/f/IdeaProjects/RtspClient/jni/myyuv2rgb.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/android/log.h
+ /cygdrive/f/IdeaProjects/RtspClient/jni/avcodec.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/rational.h
 
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/stdio.h:
+/cygdrive/f/IdeaProjects/RtspClient/jni/common.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/config.h:
+
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/stdlib.h:
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/cdefs.h:
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/cdefs_elf.h:
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/android/api-level.h:
+
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/string.h:
+
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/malloc.h:
+
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/alloca.h:
+
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/strings.h:
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/types.h:
 
@@ -88,25 +96,9 @@
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/sys/sysmacros.h:
 
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/jni.h:
-
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/stdlib.h:
-
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/string.h:
-
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/malloc.h:
-
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/alloca.h:
-
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/strings.h:
-
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/memory.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/avcodec.h:
-
-/cygdrive/f/IdeaProjects/RtspClient/jni/common.h:
-
-/cygdrive/f/IdeaProjects/RtspClient/jni/config.h:
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/stdio.h:
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/ctype.h:
 
@@ -144,12 +136,8 @@
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/assert.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/rational.h:
-
-/cygdrive/f/IdeaProjects/RtspClient/jni/edu_tfnrc_rtp_codec_h264_NativeH264Decoder.h:
-
-/cygdrive/f/IdeaProjects/RtspClient/jni/h264.h:
-
 /cygdrive/f/IdeaProjects/RtspClient/jni/myyuv2rgb.h:
 
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-x86/usr/include/android/log.h:
+/cygdrive/f/IdeaProjects/RtspClient/jni/avcodec.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/rational.h:

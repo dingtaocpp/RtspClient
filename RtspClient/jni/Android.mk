@@ -32,6 +32,7 @@ LOCAL_SRC_FILES :=  \
     error_resilience.c \
     cabac.c \
     simple_idct.c \
+    myyuv2rgb.c     \
     dsputil.c \
     pred_mb.c \
     mpegvideo.c \

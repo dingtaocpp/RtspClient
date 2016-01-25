@@ -38,7 +38,7 @@ public class RtspControlTest implements RequestListener{
             this.client = new RtspClient();
             this.client.setTransport(new TCPTransport());
 
-            this.client.setHandler(handler);    //debug
+//            this.client.setHandler(handler);    //debug
 
             this.client.setRequestListener(this);
             this.state = RtspConstants.READY;

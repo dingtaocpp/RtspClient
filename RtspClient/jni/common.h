@@ -1040,7 +1040,7 @@ static always_inline int get_vlc2(GetBitContext *s, VLC_TYPE (*table)[2],
     return code;
 }
 
-#define TRACE
+//#define TRACE
 
 #ifdef TRACE
 
@@ -1092,7 +1092,7 @@ static inline int get_xbits_trace(GetBitContext *s, int n, char *file, char *fun
 
 #else //TRACE
 
-#define tprintf( ) {}	
+#define tprintf(...) {}	
 #endif
 
 /* define it to include statistics code (useful only for optimizing

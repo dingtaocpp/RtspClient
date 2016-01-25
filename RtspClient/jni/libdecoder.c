@@ -4,6 +4,7 @@
 #include "avcodec.h"
 #include "edu_tfnrc_rtp_codec_h264_NativeH264Decoder.h"
 #include "h264.h"
+#include "myyuv2rgb.h"
 #include<android/log.h>
 #include<string.h>
 #include<malloc.h>
@@ -18,13 +19,14 @@ AVCodec * codec;			/*CODEC*/
 AVCodecContext * c;		/*CODEC Context*/
 int cnt;						//解码计数
 int  got_picture;		/*是否解码一帧图像*/
-AVFrame * picture;		/*解码后的图像帧空间*/
-FILE * out_file;
+AVFrame * picture, *pictureARGB;		/*解码后的图像帧空间*/
+
+MySwsContext * img_convert_ctx = NULL;	/*转换参数集*/
+
 
 JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecoder
   (JNIEnv * env, jclass clazz){
 
-  out_file = fopen("/sdcard/Pictures/output.rgb", "wb");
   /*CODEC的初始化，初始化一些常量表*/
 	avcodec_init();
 
@@ -52,7 +54,8 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
 	}
 	/*为AVFrame申请空间，并清零*/
   picture   = avcodec_alloc_frame();
-	if(!picture) 	{
+  pictureARGB = avcodec_alloc_frame();
+	if(!picture || !pictureARGB) 	{
 		LOGD("failed to init AVFrame");
 		return 104;
 	}
@@ -63,7 +66,6 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
   JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_DeinitDecoder
     (JNIEnv * env, jclass clazz){
 
-    if(out_file) fclose(out_file);
     /*关闭CODEC，释放资源,调用decode_end本地函数*/
 	if(c) {
 		avcodec_close(c);
@@ -85,10 +87,10 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
     	int size = 0;	//输入进Buf数组字节数
     	int i;
     	unsigned char * Buf = NULL;	/*input H264 stream*/
-    	uint32_t * out = NULL;
     	//java byte数组转换为 char 数组
     	jsize arrayLen = (*env)->GetArrayLength(env, ByteArray);
     	jbyte * data = (*env)->GetByteArrayElements(env, ByteArray, JNI_FALSE);
+    	
     	if(arrayLen > 0){
     		Buf = (unsigned char*)av_malloc(arrayLen);
     		memcpy(Buf, data, arrayLen);
@@ -96,6 +98,9 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
     	}
     	//释放内存
     	(*env)->ReleaseByteArrayElements(env, ByteArray, data, 0);
+    	//初始化ARGB内存区
+    	jint * out = (*env)->GetIntArrayElements(env, IntArray, 0);
+    	avpicture_fill(pictureARGB, out, PIX_FMT_ARGB, 1280, 720);
 
     	if(!size){
     		LOGD("size is 0");
@@ -111,7 +116,7 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
     	LOGI("No:=%4d, length=%4d\n",cnt,consumed_bytes);
 
 			/*返回<0 表示解码数据头，返回>0，表示解码一帧图像*/
-			if(consumed_bytes > 0)
+			if(consumed_bytes > 0 && got_picture)
 			{
 //				/*从二维空间中提取解码后的图像*/
 //				for(i=0; i<c->height; i++)
@@ -122,12 +127,14 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
 //					fwrite(picture->data[2] + i * picture->linesize[2], 1, c->width/2, out_file);
 
 				/*解码后得到YUV格式图像转换为RGB24格式*/
-				out = (uint32_t*)av_malloc(c->width * c->height * 4);
-				convert(c->width, c->height, picture, out);
-				(*env)->SetIntArrayRegion(IntArray, 0, c->width, c->height, (const jint*)out);
-//				fwrite(out, 4, c->width * c->height, out_file);
+				/*Picutre中为YUV格式，转换为RGBA格式给PictureARGB*/
+    			if(!img_convert_ctx)			
+    				img_convert_ctx = sws_getContext(c->width, c->height, c->pix_fmt, c->width, c->height,
+    					PIX_FMT_ARGB);
+    			yuv2argb_c(img_convert_ctx, (const uint8_t* const*)picture->data, picture->linesize, 0, c->height, pictureARGB->data, pictureARGB->linesize);
+    				(*env)->ReleaseIntArrayElements(env, IntArray, out, 0);
 
-		}
+
 			//释放缓存
 			if(Buf){
 				free(Buf);
@@ -135,7 +142,15 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
 			if(out){
 				free(out);
 			}
-
+			return 1;
+    	}
+    	//释放缓存
+        if(Buf){
+        	free(Buf);
+        }
+        if(out){
+        	free(out);
+        }
     	return 0;
     }
 
@@ -157,37 +172,37 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
     		return 0;
     }
 
-void convert (int width,int height, AVFrame *in_picture,uint32_t *out){
-	uint8_t *pY;
-	uint8_t *pU;
-	uint8_t *pV;
-	int Y,U,V;
-	int i,j;
-	int R,G,B,Cr,Cb;
-
-	/* Init */
-	pY = in_picture->data[0];
-	pU = in_picture->data[1];
-	pV = in_picture->data[2];
-
-	for(i=0;i<height;i++){
-		for(j=0;j<width;j++){
-			/* YUV values uint */
-			Y=*((pY)+ (i*picture->linesize[0]) + j);
-			U=*( pU + (j/2) + ((picture->linesize[1])*(i/2)));
-			V=*( pV + (j/2) + ((picture->linesize[2])*(i/2)));
-			/* RBG values */
-			Cr = V-128;
-			Cb = U-128;
-			R = Y + ((359*Cr)>>8);
-			G = Y - ((88*Cb+183*Cr)>>8);
-			B = Y + ((454*Cb)>>8);
-			if (R>255)R=255; else if (R<0)R=0;
-			if (G>255)G=255; else if (G<0)G=0;
-			if (B>255)B=255; else if (B<0)B=0;
-
-			/* Write data */
-			out[((i*width) + j)]=((((R & 0xFF) << 16) | ((G & 0xFF) << 8) | (B & 0xFF))& 0xFFFFFFFF);
-		}
-	}
-}
+//void convert (int width,int height, AVFrame *in_picture,uint32_t *out){
+//	uint8_t *pY;
+//	uint8_t *pU;
+//	uint8_t *pV;
+//	int Y,U,V;
+//	int i,j;
+//	int R,G,B,Cr,Cb;
+//
+//	/* Init */
+//	pY = in_picture->data[0];
+//	pU = in_picture->data[1];
+//	pV = in_picture->data[2];
+//
+//	for(i=0;i<height;i++){
+//		for(j=0;j<width;j++){
+//			/* YUV values uint */
+//			Y=*((pY)+ (i*picture->linesize[0]) + j);
+//			U=*( pU + (j/2) + ((picture->linesize[1])*(i/2)));
+//			V=*( pV + (j/2) + ((picture->linesize[2])*(i/2)));
+//			/* RBG values */
+//			Cr = V-128;
+//			Cb = U-128;
+//			R = Y + ((359*Cr)>>8);
+//			G = Y - ((88*Cb+183*Cr)>>8);
+//			B = Y + ((454*Cb)>>8);
+//			if (R>255)R=255; else if (R<0)R=0;
+//			if (G>255)G=255; else if (G<0)G=0;
+//			if (B>255)B=255; else if (B<0)B=0;
+//
+//			/* Write data */
+//			out[((i*width) + j)]=((((R & 0xFF) << 16) | ((G & 0xFF) << 8) | (B & 0xFF)) | 0xFF000000);
+//		}
+//	}
+//}
