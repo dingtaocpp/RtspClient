@@ -116,14 +116,14 @@ public class RtpVideoRenderer {
      */
     public RtpVideoRenderer(String uri/*, Handler handler*/) throws Exception {
 
-        Log.d(TAG, "Creating renderer");
+//        Log.d(TAG, "Creating renderer");
         /*
          * The RtspControl opens a connection to an RtspServer, that
          * is determined by the URI provided.
          */
         rtspControl = new RtspControl(uri);
 
-        Log.d(TAG, "RtspControl created. State code is " + rtspControl.getState());
+//        Log.d(TAG, "RtspControl created. State code is " + rtspControl.getState());
 
         /*
          * wait unit the rtspControl has achieved status READY; in this
@@ -138,13 +138,11 @@ public class RtpVideoRenderer {
          * port, the RtspVideoRenderer is listening to
          * (UDP) RTP packets.
          */
-        Log.d(TAG, "Rtsp READY");
-
         // localRtpPort = NetworkRessourceManager.generateLocalRtpPort();
         localRtpPort = rtspControl.getClientPort();
         reservePort(localRtpPort);
 
-        Log.i(TAG, "localRtpPort: " + localRtpPort);
+//        Log.i(TAG, "localRtpPort: " + localRtpPort);
         /*
          * The media resources associated with the SDP descriptor are
          * evaluated and the respective video encoding determined
@@ -370,7 +368,6 @@ public class RtpVideoRenderer {
         videoStartTime = SystemClock.uptimeMillis();
         started = true;
 
-        Log.d(TAG, "start renderer successfully");
 
     }
 
@@ -421,22 +418,23 @@ public class RtpVideoRenderer {
         }
         @Override
         public void open() throws Exception {
-            surface.setAspectRatio(1280, 720);
         }
 
         @Override
-        public void write(Buffer buffer) throws Exception {
+        public void  write(Buffer buffer) throws Exception {
 
-            if (NativeH264Decoder.DecodeAndConvert((byte[])buffer.getData(), decodedFrame) == 1) {
-                rgbFrame.setPixels(decodedFrame, 0, videoSize.getWidth(), 0, 0,
-                        videoSize.getWidth(), videoSize.getHeight());
+                if (NativeH264Decoder.DecodeAndConvert((byte[]) buffer.getData(), decodedFrame) == 1) {
+                    rgbFrame.setPixels(decodedFrame, 0, videoSize.getWidth(), 0, 0,
+                            videoSize.getWidth(), videoSize.getHeight());
 
-                if (surface != null) {
-                    surface.setImage(rgbFrame);
+
+                    if (surface != null) {
+                        surface.setImage(rgbFrame);
+                    }
+                } else {
+                    Log.e(TAG, "MediaRtpOutput.writeSample: cannot decode sample >len:" + buffer.getLength());
                 }
-            } else {
-                Log.e(TAG, "MediaRtpOutput.writeSample: cannot decode sample >len:" + buffer.getLength());
-            }
+
         }
 
         @Override

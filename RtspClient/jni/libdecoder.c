@@ -128,9 +128,11 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
 
 				/*解码后得到YUV格式图像转换为RGB24格式*/
 				/*Picutre中为YUV格式，转换为RGBA格式给PictureARGB*/
-    			if(!img_convert_ctx)			
+    			if(!img_convert_ctx){
+    					LOGI("width: %d height: %d", c->width, c->height);
     				img_convert_ctx = sws_getContext(c->width, c->height, c->pix_fmt, c->width, c->height,
     					PIX_FMT_ARGB);
+    				}
     			yuv2argb_c(img_convert_ctx, (const uint8_t* const*)picture->data, picture->linesize, 0, c->height, pictureARGB->data, pictureARGB->linesize);
     				(*env)->ReleaseIntArrayElements(env, IntArray, out, 0);
 
@@ -157,7 +159,7 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
 
   JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_getVideoWidth
     (JNIEnv *env, jclass clazz){
-    	if(!c)
+    	if(c)
     		return c->width;
     	else
     		return 0;
@@ -166,7 +168,7 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_initDecod
 
   JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_getVideoHeight
     (JNIEnv *env, jclass clazz){
-    	if(!c)
+    	if(c)
     		return c->height;
     	else
     		return 0;
