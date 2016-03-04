@@ -14,4 +14,6 @@ public class NativeH264Decoder {
     public static native int getVideoWidth();
 
     public static native int getVideoHeight();
+
+    public static native int findDecoder(int codecId);
 }

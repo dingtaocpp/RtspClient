@@ -24,10 +24,16 @@
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/alloca.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/strings.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/memory.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/avcodec.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/common.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/config.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/ctype.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavcodec/avcodec.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/errno.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/linux/errno.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm/errno.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm-generic/errno.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm-generic/errno-base.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/samplefmt.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/avutil.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/common.h \
+ /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/inttypes.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/limits.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/sys/limits.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/linux/limits.h \
@@ -35,19 +41,38 @@
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/machine/limits.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/sys/syslimits.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm/page.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/errno.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/linux/errno.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm/errno.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm-generic/errno.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm-generic/errno-base.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/math.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/bswap.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/inttypes.h \
- /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/assert.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/rational.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/attributes.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/macros.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/version.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/avconfig.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/mem.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/error.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/rational.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/mathematics.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/intfloat.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/log.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/pixfmt.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/attributes.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/avutil.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/buffer.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/cpu.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/channel_layout.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/dict.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/frame.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/buffer.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/dict.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/samplefmt.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/log.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/pixfmt.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/rational.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavcodec/version.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/version.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/avutil.h \
  /cygdrive/f/IdeaProjects/RtspClient/jni/edu_tfnrc_rtp_codec_h264_NativeH264Decoder.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/h264.h \
- /cygdrive/f/IdeaProjects/RtspClient/jni/myyuv2rgb.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/frame.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libswscale/swscale.h \
+ /cygdrive/f/IdeaProjects/RtspClient/jni/libswscale/version.h \
  /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/android/log.h
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/stdio.h:
@@ -98,13 +123,25 @@
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/memory.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/avcodec.h:
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavcodec/avcodec.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/common.h:
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/errno.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/config.h:
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/linux/errno.h:
 
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/ctype.h:
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm/errno.h:
+
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm-generic/errno.h:
+
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm-generic/errno-base.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/samplefmt.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/avutil.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/common.h:
+
+/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/inttypes.h:
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/limits.h:
 
@@ -120,30 +157,68 @@
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm/page.h:
 
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/errno.h:
-
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/linux/errno.h:
-
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm/errno.h:
-
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm-generic/errno.h:
-
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/asm-generic/errno-base.h:
-
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/math.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/bswap.h:
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/attributes.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/inttypes.h:
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/macros.h:
 
-/cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/assert.h:
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/version.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/rational.h:
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/avconfig.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/mem.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/error.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/rational.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/mathematics.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/intfloat.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/log.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/pixfmt.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/attributes.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/avutil.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/buffer.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/cpu.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/channel_layout.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/dict.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/frame.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/buffer.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/dict.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/samplefmt.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/log.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/pixfmt.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/rational.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavcodec/version.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/version.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/avutil.h:
 
 /cygdrive/f/IdeaProjects/RtspClient/jni/edu_tfnrc_rtp_codec_h264_NativeH264Decoder.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/h264.h:
+/cygdrive/f/IdeaProjects/RtspClient/jni/libavutil/frame.h:
 
-/cygdrive/f/IdeaProjects/RtspClient/jni/myyuv2rgb.h:
+/cygdrive/f/IdeaProjects/RtspClient/jni/libswscale/swscale.h:
+
+/cygdrive/f/IdeaProjects/RtspClient/jni/libswscale/version.h:
 
 /cygdrive/d/android-ndk-r10d/platforms/android-17/arch-arm/usr/include/android/log.h:

@@ -47,6 +47,9 @@ JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_getVideoW
 JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_getVideoHeight
   (JNIEnv *, jclass);
 
+JNIEXPORT jint JNICALL Java_edu_tfnrc_rtp_codec_h264_NativeH264Decoder_findDecoder
+  (JNIEnv *, jclass, jint);
+
 #ifdef __cplusplus
 }
 #endif
