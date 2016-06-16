@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 
 /**
  * UDP connection for RTP
@@ -49,6 +50,13 @@ public class UDPConnection {
             socket.close();
             socket = null;
         }
+    }
+
+    /*
+    * Set size of received data buffer
+    * */
+    public void setReceivedBufferSize(int size) throws SocketException{
+        this.socket.setReceiveBufferSize(size);
     }
 
     /**

@@ -24,7 +24,7 @@ public class RtspDescriptor {
         RtspMedia mediaItem = null;
 
         try {
-            //½«descriptor·Ö¸î£¬·Ö¸ô·ûÎª"\r\n"
+            //å°†descriptoråˆ†å‰²ï¼Œåˆ†éš”ç¬¦ä¸º"\r\n"
             StringTokenizer tokenizer = new StringTokenizer(descriptor, SEP);
             while(tokenizer.hasMoreTokens()){
                 String token = tokenizer.nextToken();
@@ -32,7 +32,7 @@ public class RtspDescriptor {
                 if(token.startsWith("m=")){
 
                     Log.i(TAG, "new media item: " + token);
-                    //·¢ÏÖĞÂµÄÃ½ÌåÏî   a new media item is detected
+                    //å‘ç°æ–°çš„åª’ä½“é¡¹   a new media item is detected
                     mediaItem = new RtspMedia(token);
                     mediaList.add(mediaItem);
                 } else if(token.startsWith("a=") && mediaItem != null){
@@ -51,7 +51,7 @@ public class RtspDescriptor {
     public ArrayList<RtspMedia> getMediaList() {
         return mediaList;
     }
-    //»ñÈ¡ÁĞ±íÖĞ×î¿¿Ç°µÄÊÓÆµ£¨·ÇÒôÆµ£©
+    //è·å–åˆ—è¡¨ä¸­æœ€é å‰çš„è§†é¢‘ï¼ˆééŸ³é¢‘ï¼‰
     public RtspMedia getFirstVideo(){
         RtspMedia video = null;
         for(RtspMedia mediaItem : this.mediaList){

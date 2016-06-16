@@ -432,6 +432,8 @@ public class RtpVideoRenderer {
         @Override
         public void  write(Buffer buffer) throws Exception {
 
+//            Log.i(TAG, "buffer sequence: " + buffer.getSequenceNumber());
+            if(!buffer.isDiscard()) {
                 if (NativeH264Decoder.DecodeAndConvert((byte[]) buffer.getData(), decodedFrame) == 1) {
                     rgbFrame.setPixels(decodedFrame, 0, videoSize.getWidth(), 0, 0,
                             videoSize.getWidth(), videoSize.getHeight());
@@ -443,7 +445,7 @@ public class RtpVideoRenderer {
                 } else {
                     Log.e(TAG, "MediaRtpOutput.writeSample: cannot decode sample >len:" + buffer.getLength());
                 }
-
+            }
         }
 
         @Override

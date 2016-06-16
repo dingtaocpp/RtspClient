@@ -10,7 +10,7 @@ import java.net.URI;
 
 /**
  *
- * ²âÊÔ¸÷²½ÖèËù·¢ËÍĞÅÏ¢
+ * æµ‹è¯•å„æ­¥éª¤æ‰€å‘é€ä¿¡æ¯
  * Created by leip on 2015/12/2.
  */
 public class RtspControlTest implements RequestListener{
@@ -23,7 +23,7 @@ public class RtspControlTest implements RequestListener{
 
     private String resource;
 
-    private boolean connected = true;   //²âÊÔÊ±Îªtrue£¬Êµ¼ÊÄ¬ÈÏÎªfalse
+    private boolean connected = true;   //æµ‹è¯•æ—¶ä¸ºtrueï¼Œå®é™…é»˜è®¤ä¸ºfalse
 
     private int state;
 
@@ -46,7 +46,7 @@ public class RtspControlTest implements RequestListener{
             // the OPTIONS request is used to invoke and
             // test the connection to the RTSP server,
             // specified with the URI provided
-//            this.client.options("*", this.uri); TODO:´ı»¹Ô­
+//            this.client.options("*", this.uri); TODO:å¾…è¿˜åŸ
         }catch (Exception e){
             e.printStackTrace();
         }

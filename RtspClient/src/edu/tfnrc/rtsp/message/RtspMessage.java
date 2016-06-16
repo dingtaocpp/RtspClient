@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * RtspÍêÕûÏûÏ¢
+ * Rtspå®Œæ•´æ¶ˆæ¯
  *
  * Created by leip on 2015/11/27.
  */
 public abstract class RtspMessage implements Message{
-    //RtspÍêÕûÏûÏ¢ÓÉÒÔÏÂ4²¿·Ö×é³É
+    //Rtspå®Œæ•´æ¶ˆæ¯ç”±ä»¥ä¸‹4éƒ¨åˆ†ç»„æˆ
     private String line;
 
     private List<RtspHeader> headers;
@@ -43,14 +43,14 @@ public abstract class RtspMessage implements Message{
         return headers.get(index);
     }
 
-    //¸ÃÊµÀı×ª»»Îª×Ö½ÚÊı¾İ£¬ÒÔ´ı·¢ËÍ
+    //è¯¥å®ä¾‹è½¬æ¢ä¸ºå­—èŠ‚æ•°æ®ï¼Œä»¥å¾…å‘é€
     public byte[] getBytes() throws Exception {
-        //Î´Å×³öÒì³£ÔòËµÃ÷´æÔÚCSeqHeader
+        //æœªæŠ›å‡ºå¼‚å¸¸åˆ™è¯´æ˜å­˜åœ¨CSeqHeader
         getHeader(CSeqHeader.NAME);
-        //Ìí¼ÓUser-AgentÍ·ĞÅÏ¢
-        //TODO: ³õ²½ÅĞ¶Ï£¬·şÎñ¶ËÔİÎ´Ê¶±ğ
+        //æ·»åŠ User-Agentå¤´ä¿¡æ¯
+        //TODO: åˆæ­¥åˆ¤æ–­ï¼ŒæœåŠ¡ç«¯æš‚æœªè¯†åˆ«
         addHeader(new RtspHeader("User-Agent", "RtspClient"));
-        //»ñÈ¡EntityÖ®Ç°µÄĞÅÏ¢²¿·Ö
+        //è·å–Entityä¹‹å‰çš„ä¿¡æ¯éƒ¨åˆ†
         byte[] message = toString().getBytes();
         if(getEntityMessage() != null) {
             byte[] body = entity.getBytes();
@@ -64,7 +64,7 @@ public abstract class RtspMessage implements Message{
         return message;
     }
 
-    /*´æ´¢µÄList×ªÎªArray*/
+    /*å­˜å‚¨çš„Listè½¬ä¸ºArray*/
     public RtspHeader[] getHeaders() {
         return headers.toArray(new RtspHeader[headers.size()]);
     }
@@ -88,7 +88,7 @@ public abstract class RtspMessage implements Message{
             cseq = (CSeqHeader) header;
         int index = headers.indexOf(header);
 
-        //Í¬ÃûÓÃĞÂµÄÍ·ĞÅÏ¢
+        //åŒåç”¨æ–°çš„å¤´ä¿¡æ¯
         if(index > -1)
             headers.remove(index);
         else

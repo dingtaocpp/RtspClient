@@ -4,7 +4,7 @@ import edu.tfnrc.rtsp.header.CSeqHeader;
 import edu.tfnrc.rtsp.header.RtspHeader;
 
 /**
- * Message = ÃüÁî||×´Ì¬ + Header + "\r\n" + EntityMessage
+ * Message = å‘½ä»¤||çŠ¶æ€ + Header + "\r\n" + EntityMessage
  * Created by leip on 2015/11/26.
  */
 public interface Message {

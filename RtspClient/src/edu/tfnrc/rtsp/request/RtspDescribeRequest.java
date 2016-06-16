@@ -21,7 +21,7 @@ public class RtspDescribeRequest extends RtspRequest {
     @Override
     public byte[] getBytes() throws Exception {
 
-        //ÅĞ¶ÏÊÇ·ñÓĞAccept¹Ø¼ü×Ö£¬Ã»ÓĞÔòÅ×³öÒì³£
+        //åˆ¤æ–­æ˜¯å¦æœ‰Acceptå…³é”®å­—ï¼Œæ²¡æœ‰åˆ™æŠ›å‡ºå¼‚å¸¸
         getHeader("Accept");
         return super.getBytes();
     }

@@ -36,6 +36,12 @@ public class RtpPacketReceiver {
     * */
     private static int HI3518_DATAGRAM_SIZE = 1414;
 
+    /*
+    * Received buffer size for UDP socket.
+    * The size should be enough for decreasing packets loss ratio.
+    * */
+    private static int DEFAULT_UDP_BUFFER_SIZE = 102400;
+
     /**
     * Statistics
     * */
@@ -65,9 +71,12 @@ public class RtpPacketReceiver {
     public RtpPacketReceiver(int port) throws IOException{
         //create UDP server
         connection = new UDPConnection();
+
         connection.open(port);
 
         Log.d(TAG, "RTP receiver created on port " + port);
+
+        connection.setReceivedBufferSize(DEFAULT_UDP_BUFFER_SIZE);
     }
 
     /**
@@ -99,12 +108,15 @@ public class RtpPacketReceiver {
             RtpPacket pkt = parseRtpPacket(data);
 
             //debug
-            Log.i(TAG, "time stamp: " + pkt.timestamp);
+            StringBuilder debugStr = new StringBuilder("time stamp: ")
+                    .append(pkt.timestamp).append('\n')
+                    .append("payload length: ").append(pkt.payloadLength)
+                    .append('\n').append("marker: ").append(pkt.marker)
+                    .append('\n').append("seqnum: ").append(pkt.seqnum);
 
-            Log.i(TAG, "length: " + pkt.length);
-            Log.i(TAG, "payload length: " + pkt.payloadLength);
-            Log.i(TAG, "marker: " + pkt.marker);
-            Log.i(TAG, "seqnum: " + pkt.seqnum);
+
+
+            Log.i(TAG,debugStr.toString());
 
 
             if(pkt.payloadType != 12){

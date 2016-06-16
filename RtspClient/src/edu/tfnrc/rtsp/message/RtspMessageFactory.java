@@ -21,18 +21,18 @@ import java.util.Map;
  */
 public class RtspMessageFactory implements MessageFactory{
 
-    //Header»º´æ³Ø
+    //Headerç¼“å­˜æ± 
     private static Map<String, Constructor<? extends RtspHeader>> headerMap;
-    //Request»º´æ³Ø
+    //Requestç¼“å­˜æ± 
     private static Map<RtspRequest.Method, Class<? extends RtspRequest>> requestMap;
 
     static {
         headerMap = new HashMap<String, Constructor<? extends RtspHeader>>();
         requestMap = new HashMap<RtspRequest.Method, Class<? extends RtspRequest>>();
 
-        //ÌáÇ°·ÅÈëÍ·ĞÅÏ¢Àà,ÇëÇóÀà
+        //æå‰æ”¾å…¥å¤´ä¿¡æ¯ç±»,è¯·æ±‚ç±»
         try{
-            putHeader(ContentEncodingHeader.class); //TODO: EncodingÎÊÌâ
+            putHeader(ContentEncodingHeader.class); //TODO: Encodingé—®é¢˜
             putHeader(ContentLengthHeader.class);
             putHeader(ContentTypeHeader.class);
             putHeader(CSeqHeader.class);
@@ -76,7 +76,7 @@ public class RtspMessageFactory implements MessageFactory{
                 } catch (IllegalArgumentException ilae){
 
                 }
-                //´ÓMapÖĞÈ¡³öÏàÓ¦ÀàĞÍµÄRequestĞÅÏ¢
+                //ä»Mapä¸­å–å‡ºç›¸åº”ç±»å‹çš„Requestä¿¡æ¯
                 Class<? extends RtspRequest> cls = requestMap.get(method);
                 if(cls != null)
                     message = cls.getConstructor(String.class).newInstance(line);
@@ -117,7 +117,7 @@ public class RtspMessageFactory implements MessageFactory{
             throw new Exception(e);
         } finally
         {
-            //TODO:¶ÁÈ¡ºó¸üĞÂbuffer×´Ì¬
+            //TODO:è¯»å–åæ›´æ–°bufferçŠ¶æ€
             buffer.setused(initial - in.available());
             //buffer.discardData();
 

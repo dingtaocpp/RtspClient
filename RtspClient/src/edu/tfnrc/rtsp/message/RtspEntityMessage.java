@@ -49,7 +49,7 @@ public class RtspEntityMessage implements EntityMessage {
         this.content = content;
 
         message.addHeader(new ContentTypeHeader(content.getType()));
-        if(content.getEncoding() != null)   //TODO:EncodingHeaderÎÊÌâ
+        if(content.getEncoding() != null)   //TODO:EncodingHeaderé—®é¢˜
             message.addHeader(new ContentEncodingHeader(content.getEncoding()));
         message.addHeader(new ContentLengthHeader(content.getBytes().length));
     }

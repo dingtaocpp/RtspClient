@@ -66,10 +66,10 @@ public class ViewerActivity extends Activity implements View.OnClickListener {
         buttonStart.setOnClickListener(this);
 
         Log.d(TAG, "on Create");
-        //有木有wifi
+        //鏈夋湪鏈墂ifi
         if(((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE))
                 .getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() != NetworkInfo.State.CONNECTED) {
-            Toast.makeText(this, "请连接WIFI", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "璇疯繛鎺IFI", Toast.LENGTH_LONG).show();
         }
         else {
             new Thread() {

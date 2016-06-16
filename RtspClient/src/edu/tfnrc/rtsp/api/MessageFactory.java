@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
  */
 public interface MessageFactory {
 
-    //TODO: RtspContent, code 等使用需注意Encoding头关键字
+    //TODO: RtspContent, code 绛変娇鐢ㄩ渶娉ㄦ剰Encoding澶村叧閿瓧
 
     public void incomingMessage(MessageBuffer message) throws Exception;
 

@@ -26,7 +26,7 @@ public class RtspHeader {
         }
         else {
             name = header.substring(0, colon);
-            value = header.substring(++colon).trim();   //³ıÈ¥×Ö·û´®¿ªÍ·ºÍÄ©Î²µÄ¿Õ¸ñ»òÆäËû×Ö·û
+            value = header.substring(++colon).trim();   //é™¤å»å­—ç¬¦ä¸²å¼€å¤´å’Œæœ«å°¾çš„ç©ºæ ¼æˆ–å…¶ä»–å­—ç¬¦
 
         }
     }
@@ -49,13 +49,13 @@ public class RtspHeader {
     }
 
     public String toString(){
-        return name + ": " + value;     //TODO: :ºóÊÇ·ñ¼Ó¿Õ¸ñ
+        return name + ": " + value;     //TODO: :åæ˜¯å¦åŠ ç©ºæ ¼
     }
 
-    //Á½¸öRtspHeaderÅĞµÈ
+    //ä¸¤ä¸ªRtspHeaderåˆ¤ç­‰
     public boolean equals(Object obj){
 
-        if(super.equals(obj))//Ö¸ÏòÍ¬Ò»¶ÔÏó£¬»ònameÏàÍ¬¼´ÏàµÈ
+        if(super.equals(obj))//æŒ‡å‘åŒä¸€å¯¹è±¡ï¼Œæˆ–nameç›¸åŒå³ç›¸ç­‰
             return true;
         if(obj instanceof String)
             return getName().equals(obj);
@@ -66,13 +66,13 @@ public class RtspHeader {
     }
 
     protected final void checkName(String expected) throws Exception{
-        if(expected.equalsIgnoreCase(getName()) == false)       //ºöÂÔ´óĞ¡Ğ´±È½Ï×Ö·û´®
+        if(expected.equalsIgnoreCase(getName()) == false)       //å¿½ç•¥å¤§å°å†™æ¯”è¾ƒå­—ç¬¦ä¸²
             throw new Exception("[Header Mismatch] - Expexted: " + expected + " " +
                     "Retrieved: " + getName());
     }
 
     protected final void setName(String name){
-        this.value = this.name;     //TODO:´ı½âÊÍ
+        this.value = this.name;     //TODO:å¾…è§£é‡Š
         this.name = name;
     }
 

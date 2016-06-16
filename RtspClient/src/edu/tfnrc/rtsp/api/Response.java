@@ -1,7 +1,7 @@
 package edu.tfnrc.rtsp.api;
 
 /**
- * S->C回应消息
+ * S->C鍥炲簲娑堟伅
  *
  * Created by leip on 2015/11/26.
  */

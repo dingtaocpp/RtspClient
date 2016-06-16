@@ -1,8 +1,8 @@
 package edu.tfnrc.rtsp;
 
 /**
- * Rtsp相关常数声明存储
- * 需与服务端对应
+ * Rtsp鐩稿叧甯告暟澹版槑瀛樺偍
+ * 闇�涓庢湇鍔＄瀵瑰簲
  *
  * Created by leip on 2015/11/26.
  */
@@ -38,7 +38,7 @@ public class RtspConstants {
 
     public static String WIDTH = "1280";
     public static String HEIGHT = "720";
-    //默认720P
+    //榛樿720P
     public static VideoSize videoSize = new VideoSize();
 
     public static VideoSize getVideoSize(){

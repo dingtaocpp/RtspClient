@@ -3,7 +3,7 @@ package edu.tfnrc.rtsp.message;
 import java.security.spec.ECField;
 
 /**
- * Ã½ÌåÏà¹ØÉèÖÃ
+ * åª’ä½“ç›¸å…³è®¾ç½®
  * Created by leip on 2015/11/27.
  */
 public class RtspMedia {
@@ -22,11 +22,11 @@ public class RtspMedia {
     private static String SDP_CONTROL   = "a=control:";
     private static String SDP_RANGE     = "a=range:";
     private static String SDP_LENGTH    = "a=length:";
-    private static String SDP_RTPMAP    = "a=rtpmap:";     //TODO:Ô­Ãû:SDP_RTMAP
+    private static String SDP_RTPMAP    = "a=rtpmap:";     //TODO:åŸå:SDP_RTMAP
     private static String SDP_FRAMERATE = "a=framerate:";
 //    private static String SDP_RECVONLY  = "a=recvonly";
 
-    public RtspMedia(String line){      //×¢Òâline¸ñÊ½£¬Ë³Ğò
+    public RtspMedia(String line){      //æ³¨æ„lineæ ¼å¼ï¼Œé¡ºåº
         String[] tokens = line.substring(2).split(" ");
 
         mediaType = tokens[0];
@@ -56,7 +56,7 @@ public class RtspMedia {
         return clockrate;
     }
 
-    //¸ù¾İlineĞÅÏ¢ÉèÖÃÃ½Ìå¸÷ÊôĞÔ
+    //æ ¹æ®lineä¿¡æ¯è®¾ç½®åª’ä½“å„å±æ€§
     public void setAttribute(String line) throws Exception {
 
         /*if(line.startsWith(SDP_RECVONLY)){
@@ -84,8 +84,8 @@ public class RtspMedia {
             }else {
                 encoding = tokens[1];
             }
-            //TODO: ´¦Àí"a=fmtp"
-        }else   /*²»ÕıÈ·µÄSDPÃèÊö*/
+            //TODO: å¤„ç†"a=fmtp"
+        }else   /*ä¸æ­£ç¡®çš„SDPæè¿°*/
             throw new Exception("Uncorrect SDP Description");
     }
 

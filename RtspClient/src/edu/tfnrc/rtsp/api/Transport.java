@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
- * ¶¨ÒåÁ¬½ÓĞ­Òé£¨TCP£¬UDP£©¡£
- * ÊµÏÖÃüÁî¶ÓÁĞÓ¦¶ÔÁ¬½Ó·±Ã¦
+ * å®šä¹‰è¿æ¥åè®®ï¼ˆTCPï¼ŒUDPï¼‰ã€‚
+ * å®ç°å‘½ä»¤é˜Ÿåˆ—åº”å¯¹è¿æ¥ç¹å¿™
  * Created by leip on 2015/11/26.
  */
 public interface Transport {

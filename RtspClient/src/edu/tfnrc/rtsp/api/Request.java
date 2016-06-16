@@ -5,16 +5,16 @@ import edu.tfnrc.rtsp.RtspClient;
 import java.net.URISyntaxException;
 
 /**
- * C->S·¢ËÍµÄÇëÇóÏûÏ¢
+ * C->Så‘é€çš„è¯·æ±‚æ¶ˆæ¯
  * Created by leip on 2015/11/26.
  */
 public interface Request extends Message {
 
-    //¸ù¾İ·şÎñ¶Ë¶¨ÒåÃüÁîÎ»ÖÃÏàÍ¬
+    //æ ¹æ®æœåŠ¡ç«¯å®šä¹‰å‘½ä»¤ä½ç½®ç›¸åŒ
     enum Method{
         DESCRIBE, ANNOUNCE, GETPARAMETERS, OPTIONS, PAUSE, PLAY,
         RECORD, REDIRECT, SETUP, SERPARAMETERS, TEARDOWN
-    };      //default°üÈ¨ÏŞ£¬
+    };      //defaultåŒ…æƒé™ï¼Œ
 
     public void setLine(Method method, String uri) throws URISyntaxException;
 

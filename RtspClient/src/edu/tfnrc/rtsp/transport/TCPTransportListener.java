@@ -15,7 +15,7 @@ public class TCPTransportListener implements TransportListener{
         behaviour = theBehaviour;
     }
 
-    //进行连接
+    //杩涜杩炴帴
     public void connected(Transport t){
         if(behaviour != null)
         {

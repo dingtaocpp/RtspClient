@@ -1,16 +1,16 @@
 package edu.tfnrc.rtsp.header;
 
 /**
- * TODO:·şÎñ¶ËÔİÊ±ÎŞ·¨Ê¶±ğ
+ * TODO:æœåŠ¡ç«¯æš‚æ—¶æ— æ³•è¯†åˆ«
  *
  * Created by leip on 2015/11/26.
  */
 public class ContentEncodingHeader extends RtspBaseStringHeader{
 
-    public static final String NAME = "Content-Encoding";   //TODO: Î´ÕÒµ½·¢ËÍ¶ËÏàÓ¦Í·¹Ø¼ü×Ö
+    public static final String NAME = "Content-Encoding";   //TODO: æœªæ‰¾åˆ°å‘é€ç«¯ç›¸åº”å¤´å…³é”®å­—
 
     public ContentEncodingHeader(){
-        super(NAME);            //valueÎ´ÉèÖÃ
+        super(NAME);            //valueæœªè®¾ç½®
     }
 
     public ContentEncodingHeader(String header){

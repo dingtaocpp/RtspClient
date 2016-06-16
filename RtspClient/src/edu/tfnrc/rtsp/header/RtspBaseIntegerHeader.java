@@ -1,7 +1,7 @@
 package edu.tfnrc.rtsp.header;
 
 /**
- * valueÎªÊı×ÖµÄĞÅÏ¢Í·
+ * valueä¸ºæ•°å­—çš„ä¿¡æ¯å¤´
  * Created by leip on 2015/11/26.
  */
 public class RtspBaseIntegerHeader extends RtspHeader {

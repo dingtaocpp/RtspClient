@@ -29,7 +29,14 @@ public class FrameAssembler extends Codec{
      */
     private static int MAX_H264P_FRAME_SIZE = 50720;//TODO: to be tested
 
+    enum NAL_TYPE { UNDEFINED, BROKEN, NORMAL, SPS };
 
+    /*
+    * If a nal unit is broken or some older ones is removed,
+    * the boolean value will be set true until receiving and
+    * assembling a completed SPS nal unit(containing IDR)
+    * */
+    protected boolean isFrameBroken = false;
 
     public FrameAssembler(){
 
@@ -46,11 +53,26 @@ public class FrameAssembler extends Codec{
         if(!input.isDiscard()) {
             frameCollection.put(input);
 
-            if(frameCollection.getLastActiveFrame().isCompleted()){
-                frameCollection.getLastActiveFrame().copyToBuffer(output);
+            Frame acFrame = frameCollection.getLastActiveFrame();
+            if(acFrame.isCompleted()){
+                acFrame.copyToBuffer(output);
 
-                output.setDiscard(false);
-                frameCollection.removeOlderThan(input.getTimeStamp());
+                isFrameBroken = isFrameBroken || frameCollection.removeOlderThan(input.getTimeStamp());
+
+                switch (acFrame.getFrameNalType()) {
+                    case BROKEN:
+                    case UNDEFINED:
+                        isFrameBroken = true;
+                    case NORMAL:
+                        output.setDiscard(isFrameBroken);
+                        break;
+                    case SPS:
+                        isFrameBroken = false;
+                        output.setDiscard(isFrameBroken);
+                        break;
+                }
+
+                Log.i(TAG, "Frame Broken: " + isFrameBroken);
                 return BUFFER_PROCESSED_OK;
             }
         }
@@ -95,6 +117,7 @@ public class FrameAssembler extends Codec{
 
         private Format format = null;
 
+        private NAL_TYPE frameNalType = NAL_TYPE.UNDEFINED;
 
         public Frame(){
             buffers = new Buffer[DEAFAULT_CAPACITY];
@@ -103,6 +126,7 @@ public class FrameAssembler extends Codec{
         public Frame(long timeStamp){
             this.timeStamp = timeStamp;
             buffers = new Buffer[DEAFAULT_CAPACITY];
+
             /*try{
                 output.open();
             }catch (Exception e){
@@ -129,7 +153,7 @@ public class FrameAssembler extends Codec{
 
             minSeqnum = Math.min(minSeqnum, seqnum);
 
-            //judge if the array is expanded
+            //check if the array is expanded
             boolean expanded = false;
             while(seqnum - minSeqnum >= capacity){
                 capacity <<= 1;
@@ -171,10 +195,29 @@ public class FrameAssembler extends Codec{
             return size == endPos - minSeqnum + 1;
         }
 
+        //parse the frame nal type, called after sortBuffers();
+        private void parseNalType(){
+            byte[] data = (byte[])buffers[0].getData();
+            if(1 == ((data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3])){
+                switch (data[4] & 0x1f) {
+                    case 7:
+                        setFrameNalType(NAL_TYPE.SPS);
+                        break;
+                    case 1:
+                        setFrameNalType(NAL_TYPE.NORMAL);
+                        break;
+                    default:
+                        setFrameNalType(NAL_TYPE.UNDEFINED);
+                }
+            } else
+                setFrameNalType(NAL_TYPE.BROKEN);
+        }
+
         //assemble the buffer array to the data
         private byte[] assembleBytes(){
 
                 sortBuffers();
+                parseNalType();
                 byte[] data = new byte[dataLength];
                 for (int i = 0, offset = 0; i < size; ++i) {
                     System.arraycopy((byte[]) buffers[i].getData(), buffers[i].getOffset(), data, offset, buffers[i].getLength());
@@ -205,8 +248,9 @@ public class FrameAssembler extends Codec{
                 throw new IllegalStateException();
 
 //            if(data.length <= MAX_H264P_FRAME_SIZE){
-
-
+                StringBuilder log = new StringBuilder("Rtp No.").append(minSeqnum)
+                                .append('-').append(endPos).append(':').append(frameNalType);
+                Log.i(TAG, log.toString());
                 output.setData(data);
                 output.setLength(data.length);
                 output.setOffset(0);
@@ -217,16 +261,21 @@ public class FrameAssembler extends Codec{
 //            }
         }
 
+        public NAL_TYPE getFrameNalType() {
+            return frameNalType;
+        }
 
+        public void setFrameNalType(NAL_TYPE frameNalType) {
+            this.frameNalType = frameNalType;
+        }
 
         public long getTimeStamp() {
             return timeStamp;
         }
     }
 
-    static class FrameCollection{
+    static class FrameCollection {
         final static int NUMBER_OF_FRAMES = 8;
-
 
 
         private Frame[] frames = new Frame[NUMBER_OF_FRAMES];
@@ -234,19 +283,19 @@ public class FrameAssembler extends Codec{
         private int numberOfFrames = 0;
 
         /**
-        * Add the buffer to the correct frame
-        * */
-        public void put(Buffer buffer){
+         * Add the buffer to the correct frame
+         */
+        public void put(Buffer buffer) {
 
             activeFrame = getFrame(buffer.getTimeStamp());
-            if(activeFrame == -1) return;
+            if (activeFrame == -1) return;
             frames[activeFrame].put(buffer);
         }
 
         /**
-        * Get the last active frame
-        * */
-        public Frame getLastActiveFrame(){
+         * Get the last active frame
+         */
+        public Frame getLastActiveFrame() {
             return frames[activeFrame];
         }
 
@@ -256,44 +305,44 @@ public class FrameAssembler extends Codec{
          *
          * @param timeStamp
          * @return frame number position in the collection
-         * */
-        public int getFrame(long timeStamp){
+         */
+        public int getFrame(long timeStamp) {
             int spot = -1;
 
             /**
-            * find the spot frame just after or the same as @param timeStamp
-            * */
-            for(int i = 0; i < numberOfFrames; ++i){
-                if(timeStamp <= frames[i].getTimeStamp()){
+             * find the spot frame just after or the same as @param timeStamp
+             * */
+            for (int i = 0; i < numberOfFrames; ++i) {
+                if (timeStamp <= frames[i].getTimeStamp()) {
                     spot = i;
                     break;
                 }
             }
-            if(spot == -1){
+            if (spot == -1) {
                 spot = numberOfFrames;
             }
             //find the correct timeStamp(spot != -1 && spot != numberOfFrames)
-            else if(frames[spot].getTimeStamp() == timeStamp){
+            else if (frames[spot].getTimeStamp() == timeStamp) {
                 return spot;
             }
             //there's no existing frame with @param timeStamp
             //we should create a new frame
-            if(numberOfFrames < NUMBER_OF_FRAMES){
+            if (numberOfFrames < NUMBER_OF_FRAMES) {
                 /*if there's enough space to create a new frame*/
 
                 //The right frames of spot move to the right to make room for new frame
-                for(int i = numberOfFrames; i > spot; --i){
-                    frames[i] = frames[i-1];
+                for (int i = numberOfFrames; i > spot; --i) {
+                    frames[i] = frames[i - 1];
                 }
                 //Create a new Frame
                 frames[spot] = new Frame(timeStamp);
-                numberOfFrames ++;
-            } else{
+                numberOfFrames++;
+            } else {
                 //Not enough space, we destroy the oldest frame
-                for(int i = 1; i < spot; ++i){
-                    frames[i-1] = frames[i];
+                for (int i = 1; i < spot; ++i) {
+                    frames[i - 1] = frames[i];
                 }
-                if(spot != 0)
+                if (spot != 0)
                     --spot;
                 else
                     return -1;  //no space for oldest timeStamp
@@ -309,22 +358,36 @@ public class FrameAssembler extends Codec{
          * This also removes given timeStamp.
          *
          * @param timeStamp
+         * @return If the removed frames have broken ones, return true
+         * unless there is a SPS-type nal after them.
          */
-        public void removeOlderThan(long timeStamp){
+        public boolean removeOlderThan(long timeStamp) {
             //spot means the leftest frame to be preserved
             int spot = numberOfFrames;
-            for(int i = 0; i < numberOfFrames; ++i){
-                if(timeStamp < frames[i].getTimeStamp()){
+
+            //returned boolean value
+            boolean ret = false;
+
+            NAL_TYPE nal_type;
+            for (int i = 0; i < numberOfFrames; ++i) {
+                nal_type = frames[i].getFrameNalType();
+                if (timeStamp < frames[i].getTimeStamp()) {
                     spot = i;
                     break;
+                } else if (nal_type == NAL_TYPE.BROKEN || nal_type == NAL_TYPE.UNDEFINED)
+                    ret = true;
+                else if (nal_type == NAL_TYPE.SPS) {
+                    ret = false;
                 }
             }
 
             //remove all frames with older timeStamp to the left
             numberOfFrames -= spot;
-            for(int i = 0; i < numberOfFrames; ++i){
+            for (int i = 0; i < numberOfFrames; ++i) {
                 frames[i] = frames[i + spot];
             }
+
+            return ret;
         }
 
     }

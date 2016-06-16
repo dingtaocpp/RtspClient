@@ -36,14 +36,14 @@ public class TransportHeader extends RtspHeader {
         TCP, UDP, DEFAULT
     };
 
-    private LowerTransport transport;   //Ğ­ÒéÀàĞÍ
-    private List<String> parameters;    //ºóĞø²ÎÊı
+    private LowerTransport transport;   //åè®®ç±»å‹
+    private List<String> parameters;    //åç»­å‚æ•°
 
-    //ÏÈ·ÖÎö´«ÊäĞ­ÒéÀàĞÍ£¬ÔÙÌí¼Ó²ÎÊı
+    //å…ˆåˆ†æä¼ è¾“åè®®ç±»å‹ï¼Œå†æ·»åŠ å‚æ•°
     public TransportHeader(String header){
         super(header);
         String value = getRawValue();
-        if(!value.startsWith("RTP/AVP")){   //¿ªÍ·¸ñÊ½Transport: RTP/AVP
+        if(!value.startsWith("RTP/AVP")){   //å¼€å¤´æ ¼å¼Transport: RTP/AVP
             throw new IllegalArgumentException("Missing RTP/AVP");
         }
 
@@ -67,7 +67,7 @@ public class TransportHeader extends RtspHeader {
             transport = LowerTransport.DEFAULT;
         if(value.charAt(index) != ';' && index != value.length())
             throw new IllegalArgumentException("Parameter block expected");
-        addParameters(value.substring(++index).split(";") /*È¡µÃÖ®ºóËùÓĞ×Ö·û´®£¬ÒÔ";"Îª±êÖ¾·ÖÎªString[]*/
+        addParameters(value.substring(++index).split(";") /*å–å¾—ä¹‹åæ‰€æœ‰å­—ç¬¦ä¸²ï¼Œä»¥";"ä¸ºæ ‡å¿—åˆ†ä¸ºString[]*/
                     );
 
     }
@@ -89,7 +89,7 @@ public class TransportHeader extends RtspHeader {
 
     void addParameters(String[] parameterList){
         if(parameters == null)
-            parameters = Arrays.asList(parameterList);  //Êı×é×ªÎªÁ´±í
+            parameters = Arrays.asList(parameterList);  //æ•°ç»„è½¬ä¸ºé“¾è¡¨
         else
             parameters.addAll(Arrays.asList(parameterList));
     }
@@ -100,7 +100,7 @@ public class TransportHeader extends RtspHeader {
     public String toString(){
         StringBuffer buffer = new StringBuffer(NAME).append(": ").append("RTP/AVP");
         if(transport != LowerTransport.DEFAULT)
-            buffer.append('/').append(transport);       //Ã¶¾ÙÀà×ª×Ö·û´®
+            buffer.append('/').append(transport);       //æšä¸¾ç±»è½¬å­—ç¬¦ä¸²
         for(String parameter : parameters)
             buffer.append(';').append(parameter);
         return buffer.toString();

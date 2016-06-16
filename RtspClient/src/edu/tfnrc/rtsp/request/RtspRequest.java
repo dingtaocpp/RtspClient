@@ -52,8 +52,8 @@ public class RtspRequest extends RtspMessage implements Request{
     }
 
     /*
-    * 处理回复共通步骤，除非请求关闭或回复关闭连接，正常情况不做任何处理
-    * 之后交给子类处理
+    * 澶勭悊鍥炲鍏遍�氭楠わ紝闄ら潪璇锋眰鍏抽棴鎴栧洖澶嶅叧闂繛鎺ワ紝姝ｅ父鎯呭喌涓嶅仛浠讳綍澶勭悊
+    * 涔嬪悗浜ょ粰瀛愮被澶勭悊
     * */
     public void handleResponse(RtspClient client, Response response){
         if(testForClose(client, this) || testForClose(client, response))

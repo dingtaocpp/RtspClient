@@ -2,9 +2,29 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/jni/libswscale/swscale.h" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/RtspClient/ViewerActivity.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/RtspClient/ViewerActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtp/Processor.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/RtspControl.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/request/RtspRequest.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/RtspConstants.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/RtspControl.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/RtspControlTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/api/Message.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/api/MessageFactory.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/api/Request.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/api/Response.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/api/Transport.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/header/ContentEncodingHeader.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/header/RtspBaseIntegerHeader.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/header/RtspContent.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/header/RtspHeader.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/header/TransportHeader.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/message/RtspDescriptor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/message/RtspEntityMessage.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/message/RtspMedia.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/message/RtspMessage.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/message/RtspMessageFactory.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/request/RtspDescribeRequest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/request/RtspRequest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/edu/tfnrc/rtsp/transport/TCPTransportListener.java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
